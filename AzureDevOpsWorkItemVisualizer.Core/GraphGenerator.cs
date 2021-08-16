@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using AzureDevOpsWorkItemVisualizer.Core.Model;
+using Handyman.Extensions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using AzureDevOpsWorkItemVisualizer.Core.Model;
-using Handyman.Extensions;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
@@ -21,7 +21,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          {
             var attributes = new Dictionary<string, string>();
 
-            var segments = new[] { (object)$"{item.Type} {item.Id}", item.State, item.Tags.Join(", ") };
+            var segments = new[] { (object)$"{item.Type} {item.Id}", item.State, item.Tags.Join(", "), item.AssignedTo };
             var metadata = string.Join(" / ", segments.Select(x => x.ToString()).Where(x => !string.IsNullOrWhiteSpace(x)));
             var name = WebUtility.HtmlEncode(item.Name);
 

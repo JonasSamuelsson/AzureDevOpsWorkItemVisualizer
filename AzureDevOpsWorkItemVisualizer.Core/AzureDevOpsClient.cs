@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AzureDevOpsWorkItemVisualizer.Core.Model;
+﻿using AzureDevOpsWorkItemVisualizer.Core.Model;
 using Handyman.Extensions;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
@@ -105,6 +105,9 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
       public class DevOpsItemFields
       {
+         [JsonProperty("System.AssignedTo")]
+         public DevOpsItemAssignee AssignedTo { get; set; }
+
          [JsonProperty("System.State")]
          public string State { get; set; }
 
@@ -116,6 +119,12 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
          [JsonProperty("System.WorkItemType")]
          public string Type { get; set; }
+      }
+
+      public class DevOpsItemAssignee
+      {
+         [JsonProperty("DisplayName")]
+         public string Name { get; set; }
       }
 
       public class DevOpsRelation

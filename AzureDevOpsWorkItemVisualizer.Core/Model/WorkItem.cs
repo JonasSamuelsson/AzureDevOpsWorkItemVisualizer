@@ -7,10 +7,10 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
    [DebuggerDisplay("{Id}:{Type}")]
    public class WorkItem
    {
+      public string AssignedTo { get; set; }
       public int Id { get; set; }
       public bool IsFinished { get; set; }
       public string Name { get; set; }
-      public bool IsOrigin { get; set; } // todo : remove
       public string State { get; set; }
       public IEnumerable<string> Tags { get; set; }
       public WorkItemType Type { get; set; }
@@ -55,6 +55,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
 
          workItem = new WorkItem
          {
+            AssignedTo = item.Fields.AssignedTo?.Name ?? string.Empty,
             Id = item.Id,
             IsFinished = IsFinishedState(item.Fields.State),
             Name = item.Fields.Title,
