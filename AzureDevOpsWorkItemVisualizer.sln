@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDevOpsWorkItemVisualizer.Blazor", "AzureDevOpsWorkItemVisualizer.Blazor\AzureDevOpsWorkItemVisualizer.Blazor.csproj", "{09E398EC-B46C-49A6-B6B8-11A2D3CFF8F1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsWorkItemVisualizer.Core", "AzureDevOpsWorkItemVisualizer.Core\AzureDevOpsWorkItemVisualizer.Core.csproj", "{36DD8BAD-D684-491D-A824-D3811ED9DE72}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsWorkItemVisualizer.Core.Tests", "AzureDevOpsWorkItemVisualizer.Core.Tests\AzureDevOpsWorkItemVisualizer.Core.Tests.csproj", "{1F4A6197-71C6-489A-94E7-A4CC549BCAD6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsWorkItemVisualizer.Console", "AzureDevOpsWorkItemVisualizer.Console\AzureDevOpsWorkItemVisualizer.Console.csproj", "{61B43440-3340-405F-9636-4AC882E1FC07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsWorkItemVisualizer.BlazorWebAssembly", "AzureDevOpsWorkItemVisualizer.BlazorWebAssembly\AzureDevOpsWorkItemVisualizer.BlazorWebAssembly.csproj", "{168D1F49-6D78-434B-8903-976F9B5C38AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{09E398EC-B46C-49A6-B6B8-11A2D3CFF8F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09E398EC-B46C-49A6-B6B8-11A2D3CFF8F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09E398EC-B46C-49A6-B6B8-11A2D3CFF8F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09E398EC-B46C-49A6-B6B8-11A2D3CFF8F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36DD8BAD-D684-491D-A824-D3811ED9DE72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36DD8BAD-D684-491D-A824-D3811ED9DE72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36DD8BAD-D684-491D-A824-D3811ED9DE72}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{61B43440-3340-405F-9636-4AC882E1FC07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61B43440-3340-405F-9636-4AC882E1FC07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61B43440-3340-405F-9636-4AC882E1FC07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{168D1F49-6D78-434B-8903-976F9B5C38AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{168D1F49-6D78-434B-8903-976F9B5C38AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{168D1F49-6D78-434B-8903-976F9B5C38AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{168D1F49-6D78-434B-8903-976F9B5C38AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
