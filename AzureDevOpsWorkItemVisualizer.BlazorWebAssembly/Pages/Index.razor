@@ -38,7 +38,9 @@
             </div>
             <div>
                <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
-               <label for="includeFinished">Include finished work items</label>
+               <label for="includeFinished">Finished</label>
+               <input id="includeIndirect" @bind="_editorValues.IncludeIndirectWorkItems" type="checkbox" />
+               <label for="includeIndirect">Indirect</label>
             </div>
             <div>
                <button hidden="@(_loading)" @onclick="LoadWorkItems">Load</button>
@@ -98,7 +100,9 @@
             PersonalAccessToken = _editorValues.PersonalAccessToken,
             Project = _editorValues.Project
          });
-         var crawler = new AllLinksCrawler(client);
+         var crawler = _editorValues.IncludeIndirectWorkItems
+            ? (ICrawler)new IndirectLinksCrawler(client)
+            : new DirectLinksCrawler(client);
          var data = await crawler.GetData(workItemIds, workItemTypes, _editorValues.IncludeFinishedWorkItems);
          var graph = new GraphGenerator().GenerateGraph(data, workItemIds);
 
@@ -125,6 +129,7 @@
       _editorValues.IncludeEpics = values?.IncludeEpics ?? false;
       _editorValues.IncludeFeatures = values?.IncludeFeatures ?? true;
       _editorValues.IncludeFinishedWorkItems = values?.IncludeFinishedWorkItems ?? false;
+      _editorValues.IncludeIndirectWorkItems = values?.IncludeIndirectWorkItems ?? false;
       _editorValues.IncludePbis = values?.IncludePbis ?? true;
       _editorValues.Organization = values?.Organization ?? empty;
       _editorValues.PersonalAccessToken = values.PersonalAccessToken ?? empty;
@@ -157,5 +162,6 @@
       public bool IncludeFeatures { get; set; }
       public bool IncludePbis { get; set; }
       public bool IncludeFinishedWorkItems { get; set; }
+      public bool IncludeIndirectWorkItems { get; set; }
    }
 }
