@@ -25,10 +25,10 @@ namespace AzureDevOpsWorkItemVisualizer.Console
          };
 
          var client = new AzureDevOpsClient(options);
-         var crawler = new AllLinksCrawler(client);
+         var crawler = new DirectLinksCrawler(client);
          var data = await crawler.GetData(workItemIds, includeWorkItemTypes, includeFinishedWorkItems: false);
 
-         var graph = new GraphGenerator().GenerateGraph(data, workItemIds);
+         var graph = new GraphGenerator().GenerateGraph(data, workItemIds, "LR");
 
          // http://magjac.com/graphviz-visual-editor/ can be used to test the graph
 

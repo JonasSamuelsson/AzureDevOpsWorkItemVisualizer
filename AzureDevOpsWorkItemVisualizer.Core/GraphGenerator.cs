@@ -9,13 +9,13 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 {
    public class GraphGenerator
    {
-      public string GenerateGraph(WorkItemCollection data, ISet<int> highlightWorkItemIds)
+      public string GenerateGraph(WorkItemCollection data, ISet<int> highlightWorkItemIds, string rankdir)
       {
          var builder = new StringBuilder();
 
          builder.AppendLine("digraph g {");
 
-         builder.AppendLine("  rankdir = LR;");
+         builder.AppendLine($"  rankdir = {rankdir};");
 
          foreach (var item in data.WorkItems.OrderBy(x => x.Id))
          {

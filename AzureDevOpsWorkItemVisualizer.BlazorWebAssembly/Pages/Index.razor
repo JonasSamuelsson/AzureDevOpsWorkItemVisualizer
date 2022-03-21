@@ -10,11 +10,11 @@
 
 @inject IJSRuntime Javascript
 @inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
 <div>
    <div style="position: fixed; top: 10px; left: 10px;" @onload="LoadEditorValues">
-      <div style="background-color: #e5e5e5; border-radius: 10px; padding: 10px;">
-         <span class="oi oi-expand-down" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+      <div style="background-color: #e5e5e5; border-radius: 10px; padding: 10px; width: 275px;">
          <div hidden="@(_editorVisible == false)">
             <div><label for="organization">Organization</label></div>
             <div><input id="organization" @bind="_editorValues.Organization" type="text" /></div>
@@ -43,11 +43,21 @@
                <label for="includeIndirect">Indirect</label>
             </div>
             <div>
-               <button hidden="@(_loading)" @onclick="LoadWorkItems">Load</button>
+               <select @bind="_editorValues.Layout">
+                  <option value="left-right">Left to right</option>
+                  <option value="top-down">Top down</option>
+               </select>
+            </div>
+         </div>
+         <div>
+            <button style="width: 90px" disabled="@(_loading)" @onclick="LoadWorkItems">
+               <span hidden="@(_loading)">Load</span>
                <span hidden="@(!_loading)">Loading...</span>
-               <span style="position: absolute; bottom: 3px; right: 7px" @onclick="ToggleEditorVisibility">
-                  <span class="oi oi-collapse-up"></span>
-               </span>
+            </button>
+            <div style="float: right">
+               @*<span class="oi oi-link-intact"></span>*@
+               <span class="oi oi-collapse-up" hidden="@(!_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+               <span class="oi oi-expand-down" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
             </div>
          </div>
       </div>
@@ -95,16 +105,17 @@
          if (_editorValues.IncludeFeatures) workItemTypes.Add(WorkItemType.Feature);
          if (_editorValues.IncludePbis) workItemTypes.Add(WorkItemType.PBI);
          var client = new AzureDevOpsClient(new AzureDevOpsClientOptions
-         {
-            Organization = _editorValues.Organization,
-            PersonalAccessToken = _editorValues.PersonalAccessToken,
-            Project = _editorValues.Project
-         });
+            {
+               Organization = _editorValues.Organization,
+               PersonalAccessToken = _editorValues.PersonalAccessToken,
+               Project = _editorValues.Project
+            });
          var crawler = _editorValues.IncludeIndirectWorkItems
             ? (ICrawler)new IndirectLinksCrawler(client)
             : new DirectLinksCrawler(client);
          var data = await crawler.GetData(workItemIds, workItemTypes, _editorValues.IncludeFinishedWorkItems);
-         var graph = new GraphGenerator().GenerateGraph(data, workItemIds);
+         var rankdir = _editorValues.Layout == "left-right" ? "LR" : "TD";
+         var graph = new GraphGenerator().GenerateGraph(data, workItemIds, rankdir);
 
          Console.WriteLine(graph);
 
@@ -125,16 +136,21 @@
       var empty = "";
       var values = LocalStorage.GetItem<EditorValues>("editor");
 
+      _editorValues.Organization = values?.Organization ?? empty;
+      _editorValues.Project = values?.Project ?? empty;
+      _editorValues.PersonalAccessToken = values?.PersonalAccessToken ?? empty;
+      _editorValues.StorePersonalAccessToken = values?.StorePersonalAccessToken ?? false;
       _editorValues.WorkItemIds = values?.WorkItemIds ?? empty;
       _editorValues.IncludeEpics = values?.IncludeEpics ?? false;
       _editorValues.IncludeFeatures = values?.IncludeFeatures ?? true;
       _editorValues.IncludeFinishedWorkItems = values?.IncludeFinishedWorkItems ?? false;
       _editorValues.IncludeIndirectWorkItems = values?.IncludeIndirectWorkItems ?? false;
       _editorValues.IncludePbis = values?.IncludePbis ?? true;
-      _editorValues.Organization = values?.Organization ?? empty;
-      _editorValues.PersonalAccessToken = values.PersonalAccessToken ?? empty;
-      _editorValues.Project = values?.Project ?? empty;
-      _editorValues.StorePersonalAccessToken = values?.StorePersonalAccessToken ?? false;
+      _editorValues.Layout = values?.Layout == "top-down" ? "top-down" : "left-right";
+
+      //var query = new Uri(NavigationManager.Uri).ParseQueryString();
+
+      //query.
 
       StateHasChanged();
 
@@ -163,5 +179,6 @@
       public bool IncludePbis { get; set; }
       public bool IncludeFinishedWorkItems { get; set; }
       public bool IncludeIndirectWorkItems { get; set; }
+      public string Layout { get; set; }
    }
 }
