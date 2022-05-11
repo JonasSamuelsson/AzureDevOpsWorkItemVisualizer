@@ -35,12 +35,17 @@
                <label for="includeFeatures">Features</label>
                <input id="includePbis" @bind="_editorValues.IncludePbis" type="checkbox" />
                <label for="includePbis">PBIs</label>
+               <br/>
+               <input id="includeBugs" @bind="_editorValues.IncludeBugs" type="checkbox" />
+               <label for="includeBugs">Bugs</label>
+               <input id="includeTasks" @bind="_editorValues.IncludeTasks" type="checkbox" />
+               <label for="includeTasks">Tasks</label>
             </div>
             <div>
-               <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
-               <label for="includeFinished">Finished</label>
                <input id="includeIndirect" @bind="_editorValues.IncludeIndirectWorkItems" type="checkbox" />
                <label for="includeIndirect">Indirect</label>
+               <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
+               <label for="includeFinished">Finished</label>
             </div>
             <div>
                <select @bind="_editorValues.Layout">
@@ -101,9 +106,11 @@
 
          var workItemIds = ParseIds();
          var workItemTypes = new HashSet<WorkItemType>();
+         if (_editorValues.IncludeBugs) workItemTypes.Add(WorkItemType.Bug);
          if (_editorValues.IncludeEpics) workItemTypes.Add(WorkItemType.Epic);
          if (_editorValues.IncludeFeatures) workItemTypes.Add(WorkItemType.Feature);
          if (_editorValues.IncludePbis) workItemTypes.Add(WorkItemType.PBI);
+         if (_editorValues.IncludeTasks) workItemTypes.Add(WorkItemType.Task);
          var client = new AzureDevOpsClient(new AzureDevOpsClientOptions
             {
                Organization = _editorValues.Organization,
@@ -141,11 +148,13 @@
       _editorValues.PersonalAccessToken = values?.PersonalAccessToken ?? empty;
       _editorValues.StorePersonalAccessToken = values?.StorePersonalAccessToken ?? false;
       _editorValues.WorkItemIds = values?.WorkItemIds ?? empty;
+      _editorValues.IncludeBugs = values?.IncludeBugs ?? false;
       _editorValues.IncludeEpics = values?.IncludeEpics ?? false;
       _editorValues.IncludeFeatures = values?.IncludeFeatures ?? true;
       _editorValues.IncludeFinishedWorkItems = values?.IncludeFinishedWorkItems ?? false;
       _editorValues.IncludeIndirectWorkItems = values?.IncludeIndirectWorkItems ?? false;
       _editorValues.IncludePbis = values?.IncludePbis ?? true;
+      _editorValues.IncludeTasks = values?.IncludeTasks ?? false;
       _editorValues.Layout = values?.Layout == "top-down" ? "top-down" : "left-right";
 
       //var query = new Uri(NavigationManager.Uri).ParseQueryString();
@@ -177,6 +186,8 @@
       public bool IncludeEpics { get; set; }
       public bool IncludeFeatures { get; set; }
       public bool IncludePbis { get; set; }
+      public bool IncludeBugs { get; set; }
+      public bool IncludeTasks { get; set; }
       public bool IncludeFinishedWorkItems { get; set; }
       public bool IncludeIndirectWorkItems { get; set; }
       public string Layout { get; set; }

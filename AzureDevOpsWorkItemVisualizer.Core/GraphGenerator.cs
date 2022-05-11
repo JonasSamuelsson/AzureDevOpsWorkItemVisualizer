@@ -9,6 +9,24 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 {
    public class GraphGenerator
    {
+      private static readonly Dictionary<WorkItemType, string> BackgroundColors = new Dictionary<WorkItemType, string>
+      {
+         { WorkItemType.Bug, "Red" },
+         { WorkItemType.Epic, "DarkOrange" },
+         { WorkItemType.Feature, "Indigo" },
+         { WorkItemType.PBI, "DeepSkyBlue" },
+         { WorkItemType.Task, "Yellow" }
+      };
+
+      private static readonly Dictionary<WorkItemType, string> FontColors = new Dictionary<WorkItemType, string>
+      {
+         { WorkItemType.Bug, "White" },
+         { WorkItemType.Epic, "White" },
+         { WorkItemType.Feature, "White" },
+         { WorkItemType.PBI, "Black" },
+         { WorkItemType.Task, "Black" }
+      };
+
       public string GenerateGraph(WorkItemCollection data, ISet<int> highlightWorkItemIds, string rankdir)
       {
          var builder = new StringBuilder();
@@ -30,15 +48,10 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             attributes["label"] = $"<<table border=\"0\"><tr><td>{metadata}</td></tr><tr><td>{name}</td></tr></table>>";
             attributes["shape"] = "box";
             attributes["style"] = highlight ? "\"bold,filled,rounded\"" : "\"filled,rounded\"";
-            attributes["fillcolor"] = item.IsFinished
-               ? "transparent"
-               : item.Type == WorkItemType.Epic
-                  ? "orange"
-                  : item.Type == WorkItemType.Feature
-                     ? "lightskyblue"
-                     : "palegreen";
-            attributes["fontcolor"] = highlight ? "black" : "gray25";
-            attributes["fontsize"] = highlight ? "16" : "14";
+            attributes["color"] = item.IsFinished ? BackgroundColors[item.Type] : "Black";
+            attributes["fillcolor"] = item.IsFinished ? "transparent" : BackgroundColors[item.Type];
+            attributes["fontcolor"] = item.IsFinished ? "Black" : FontColors[item.Type];
+            attributes["fontsize"] = highlight ? "18" : "14";
             builder.AppendLine($"  {item.Id} [{string.Join(" ", attributes.Select(x => $"{x.Key}={x.Value}"))}]");
          }
 

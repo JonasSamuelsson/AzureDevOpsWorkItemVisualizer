@@ -80,9 +80,11 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
       private static readonly Dictionary<string, WorkItemType> SupportedWorkItemTypes =
          new Dictionary<string, WorkItemType>
          {
-            {"Epic", WorkItemType.Epic},
-            {"Feature", WorkItemType.Feature},
-            {"Product Backlog Item", WorkItemType.PBI}
+            { "Bug", WorkItemType.Bug },
+            { "Epic", WorkItemType.Epic },
+            { "Feature", WorkItemType.Feature },
+            { "Product Backlog Item", WorkItemType.PBI },
+            { "Task", WorkItemType.Task }
          };
    }
 }
