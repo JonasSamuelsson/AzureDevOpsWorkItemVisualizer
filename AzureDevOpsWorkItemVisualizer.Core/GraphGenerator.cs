@@ -31,7 +31,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
       {
          var builder = new StringBuilder();
 
-         builder.AppendLine("digraph g {");
+         builder.AppendLine("digraph {");
 
          builder.AppendLine($"  rankdir = {rankdir};");
 

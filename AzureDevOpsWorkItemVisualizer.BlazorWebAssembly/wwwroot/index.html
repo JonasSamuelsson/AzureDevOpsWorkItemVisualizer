@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="full-screen">
 
 <head>
    <meta charset="utf-8" />
@@ -11,14 +11,26 @@
    <link href="AzureDevOpsWorkItemVisualizer.BlazorWebAssembly.styles.css" rel="stylesheet" />
 </head>
 
-<body>
+<body class="full-screen">
    <script src="//d3js.org/d3.v5.min.js"></script>
    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-graphviz/3.1.0/d3-graphviz.min.js" integrity="sha512-xDh+TOcWBsd00MmoBRuZvRwwiWj1sQonBPxIriVzrP6ea/3dQGSv4AY8h7dJkU1tFeEJrPgsQfvk4iVjFjQVtw==" crossorigin="anonymous"></script>
 
-   <div id="app">Loading...</div>
+   <div id="app" class="full-screen">Loading...</div>
 
    <script src="_framework/blazor.webassembly.js"></script>
+
+   <style>
+      .full-screen {
+         height: 100%;
+         width: 100%;
+      }
+
+      svg {
+         height: 100% !important;
+         width: 100% !important;
+      }
+   </style>
 
    <script>
       function updateGraph(content) {
