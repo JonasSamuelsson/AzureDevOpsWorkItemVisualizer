@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core app to Windows WebApp AzureDevOpsWorkItemVisualizer
+name: AzureDevOpsWorkItemVisualizer Blazor WebAssembly
 
 on:
   push:
@@ -19,7 +19,7 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: AzureDevOpsWorkItemVisualizer.BlazorWebAssembly
-  TEST_WORKING_DIRECTORY: AzureDevOpsWorkItemVisualizer.Core.Tests
+  TESTS_WORKING_DIRECTORY: AzureDevOpsWorkItemVisualizer.Core.Tests
 
 jobs:
   build-and-deploy:
@@ -35,22 +35,22 @@ jobs:
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Restore tests
-      run: dotnet restore "${{ env.TEST_WORKING_DIRECTORY }}"
+      run: dotnet restore "${{ env.TESTS_WORKING_DIRECTORY }}"
     - name: Build tests
-      run: dotnet build "${{ env.TEST_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build "${{ env.TESTS_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Run tests
-      run: dotnet test "${{ env.TEST_WORKING_DIRECTORY }}" --no-build
+      run: dotnet test "${{ env.TESTS_WORKING_DIRECTORY }}" --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Deploy to Azure WebApp
-      if: ${{ inputs.deploy == 'true' }}
+    - name: Deploy
+      if: ${{ inputs.deploy == true }}
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         publish-profile: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE }}
-    - name: Publish Artifacts
-      if: ${{ inputs.deploy == 'true' }}
+    - name: Publish artifacts
+      if: ${{ inputs.deploy == true }}
       uses: actions/upload-artifact@v1.0.0
       with:
         name: webapp
