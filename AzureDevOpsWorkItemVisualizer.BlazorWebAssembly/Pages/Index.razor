@@ -5,7 +5,9 @@
 @using Microsoft.AspNetCore.Components
 @using System
 @using System.Collections.Generic
+@using System.Collections.Specialized
 @using System.Linq
+@using System.Security.Cryptography.X509Certificates
 @using System.Threading.Tasks
 
 @inject IJSRuntime Javascript
@@ -35,7 +37,7 @@
                <label for="includeFeatures">Features</label>
                <input id="includePbis" @bind="_editorValues.IncludePbis" type="checkbox" />
                <label for="includePbis">PBIs</label>
-               <br/>
+               <br />
                <input id="includeBugs" @bind="_editorValues.IncludeBugs" type="checkbox" />
                <label for="includeBugs">Bugs</label>
                <input id="includeTasks" @bind="_editorValues.IncludeTasks" type="checkbox" />
@@ -59,10 +61,12 @@
                <span hidden="@(_loading)">Load</span>
                <span hidden="@(!_loading)">Loading...</span>
             </button>
-            <div style="float: right">
+            <div style="float: right; padding-top: 4px">
                @*<span class="oi oi-link-intact"></span>*@
-               <span class="oi oi-collapse-up" hidden="@(!_editorVisible)" @onclick="ToggleEditorVisibility"></span>
-               <span class="oi oi-expand-down" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+               <a href="#" @onclick="CopyUriToClipboard">Copy url</a>
+               &nbsp;
+               <span class="oi oi-caret-top" hidden="@(!_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+               <span class="oi oi-caret-bottom" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
             </div>
          </div>
       </div>
@@ -157,13 +161,61 @@
       _editorValues.IncludeTasks = values?.IncludeTasks ?? false;
       _editorValues.Layout = values?.Layout == "top-down" ? "top-down" : "left-right";
 
-      //var query = new Uri(NavigationManager.Uri).ParseQueryString();
+      var query = new Uri(NavigationManager.Uri).ParseQueryString();
 
-      //query.
+      if (query.Count != 0)
+      {
+         LoadEditorValue<string>("organization", query, x => _editorValues.Organization = x);
+         LoadEditorValue<string>("projects", query, x => _editorValues.Project = x);
+         LoadEditorValue<string>("ids", query, x => _editorValues.WorkItemIds = x);
+         LoadEditorValue<bool>("bugs", query, x => _editorValues.IncludeBugs = x);
+         LoadEditorValue<bool>("epics", query, x => _editorValues.IncludeEpics = x);
+         LoadEditorValue<bool>("features", query, x => _editorValues.IncludeFeatures = x);
+         LoadEditorValue<bool>("pbis", query, x => _editorValues.IncludePbis = x);
+         LoadEditorValue<bool>("tasks", query, x => _editorValues.IncludeTasks = x);
+         LoadEditorValue<bool>("indirect", query, x => _editorValues.IncludeIndirectWorkItems = x);
+         LoadEditorValue<bool>("finished", query, x => _editorValues.IncludeFinishedWorkItems = x);
+         LoadEditorValue<string>("layout", query, x => _editorValues.Layout = x);
+
+         NavigationManager.NavigateTo(NavigationManager.BaseUri);
+      }
 
       StateHasChanged();
 
       Console.WriteLine("editor values loaded");
+   }
+
+   private static void LoadEditorValue<T>(string name, NameValueCollection collection, Action<T> action)
+   {
+      var value = collection.Get(name);
+      if (string.IsNullOrWhiteSpace(value)) return;
+      action.Invoke((T)Convert.ChangeType(value, typeof(T)));
+   }
+
+   private async Task CopyUriToClipboard()
+   {
+      var dictionary = new Dictionary<string, string>();
+
+      StoreEditorValue("organization", _editorValues.Organization, dictionary);
+      StoreEditorValue("projects", _editorValues.Project, dictionary);
+      StoreEditorValue("ids", _editorValues.WorkItemIds, dictionary);
+      StoreEditorValue("bugs", _editorValues.IncludeBugs, dictionary);
+      StoreEditorValue("epics", _editorValues.IncludeEpics, dictionary);
+      StoreEditorValue("features", _editorValues.IncludeFeatures, dictionary);
+      StoreEditorValue("pbis", _editorValues.IncludePbis, dictionary);
+      StoreEditorValue("tasks", _editorValues.IncludeTasks, dictionary);
+      StoreEditorValue("indirect", _editorValues.IncludeIndirectWorkItems, dictionary);
+      StoreEditorValue("finished", _editorValues.IncludeFinishedWorkItems, dictionary);
+      StoreEditorValue("layout", _editorValues.Layout, dictionary);
+
+      var uri = $"{NavigationManager.BaseUri}?{string.Join("&", dictionary.Select(x => $"{x.Key}={x.Value}"))}";
+
+      await Javascript.InvokeVoidAsync("navigator.clipboard.writeText", uri);
+   }
+
+   private static void StoreEditorValue<T>(string name, T value, Dictionary<string, string> dictionary)
+   {
+      dictionary.Add(name, value.ToString().ToLowerInvariant());
    }
 
    private void SaveEditorValues()
