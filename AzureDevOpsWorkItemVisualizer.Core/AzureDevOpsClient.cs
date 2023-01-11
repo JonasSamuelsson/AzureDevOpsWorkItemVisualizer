@@ -1,6 +1,7 @@
 ﻿using AzureDevOpsWorkItemVisualizer.Core.Model;
 using Handyman.Extensions;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,8 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
          foreach (var item in await GetWorkItems(workItemIds))
          {
-            if (TryCreateWorkItem(item, workItemTypes, includeFinished, out var workItem) == false)
+            // doing our best to return the specified work items (by id) regardless of type and/or state
+            if (TryCreateWorkItem(item, AllWorkItemTypes, includeFinished: true, out var workItem) == false)
                continue;
 
             result.WorkItems.Add(workItem);
@@ -146,5 +148,9 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          public Link Link { get; set; }
          public int TargetWorkItemId { get; set; }
       }
+
+      private readonly ISet<WorkItemType> AllWorkItemTypes = Enum.GetValues(typeof(WorkItemType))
+         .Cast<WorkItemType>()
+         .ToSet();
    }
 }

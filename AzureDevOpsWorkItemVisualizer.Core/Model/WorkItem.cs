@@ -47,9 +47,6 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
       {
          workItem = null;
 
-         if (item.Fields.State == "Removed")
-            return false;
-
          if (SupportedWorkItemTypes.TryGetValue(item.Fields.Type, out var workItemType) == false)
             return false;
 
@@ -69,7 +66,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
 
       public static bool IsFinishedState(string state)
       {
-         return state == "Done";
+         return state == "Closed" || state == "Done" || state == "Removed";
       }
 
       private static IEnumerable<string> ParseWorkItemTags(string tags)
