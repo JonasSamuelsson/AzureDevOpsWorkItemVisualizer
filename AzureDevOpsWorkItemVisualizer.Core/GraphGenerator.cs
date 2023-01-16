@@ -53,8 +53,8 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             attributes["fillcolor"] = item.IsFinished ? "transparent" : BackgroundColors[item.Type];
             attributes["fontcolor"] = item.IsFinished ? "Black" : FontColors[item.Type];
             attributes["fontsize"] = highlight ? "18" : "14";
-            attributes["URL"] = $"https://dev.azure.com/{options.AzureDevOpsOrganization}/{options.AzureDevOpsProject}/_workitems/edit/{item.Id}";
-            attributes["target"] = "_blank";
+            attributes["URL"] = $"\"https://dev.azure.com/{options.AzureDevOpsOrganization}/{options.AzureDevOpsProject}/_workitems/edit/{item.Id}\"";
+            attributes["target"] = "\"_blank\"";
 
             builder.AppendLine($"  {item.Id} [{string.Join(" ", attributes.Select(x => $"{x.Key}={x.Value}"))}]");
          }
