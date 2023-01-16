@@ -126,7 +126,13 @@
             : new DirectLinksCrawler(client);
          var data = await crawler.GetData(workItemIds, workItemTypes, _editorValues.IncludeFinishedWorkItems);
          var rankdir = _editorValues.Layout == "left-right" ? "LR" : "TD";
-         var graph = new GraphGenerator().GenerateGraph(data, workItemIds, rankdir);
+         var graph = new GraphGenerator().GenerateGraph(data, new GraphGenerator.Options
+         {
+            AzureDevOpsOrganization = _editorValues.Organization,
+            AzureDevOpsProject = _editorValues.Project,
+            HighlightedWorkItemIds = workItemIds,
+            RankDir = rankdir
+         });
 
          Console.WriteLine(graph);
 

@@ -27,23 +27,25 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          { WorkItemType.Task, "Black" }
       };
 
-      public string GenerateGraph(WorkItemCollection data, ISet<int> highlightWorkItemIds, string rankdir)
+      public string GenerateGraph(WorkItemCollection data, Options options)
       {
          var builder = new StringBuilder();
 
          builder.AppendLine("digraph {");
 
-         builder.AppendLine($"  rankdir = {rankdir};");
+         builder.AppendLine($"  rankdir = {options.RankDir};");
 
          foreach (var item in data.WorkItems.OrderBy(x => x.Id))
          {
             var attributes = new Dictionary<string, string>();
 
-            var segments = new[] { (object)$"{item.Type} {item.Id}", item.State, item.Tags.Join(", "), item.AssignedTo };
+            var link = $"<a href=\"https://dev.azure.com/{options.AzureDevOpsOrganization}/{options.AzureDevOpsProject}/_workitems/edit/{item.Id}\">{item.Type} {item.Id}</a>";
+            var segments = new object[] { link, item.State, item.Tags.Join(", "), item.AssignedTo };
             var metadata = string.Join(" / ", segments.Select(x => x.ToString()).Where(x => !string.IsNullOrWhiteSpace(x)));
+
             var name = WebUtility.HtmlEncode(item.Name);
 
-            var highlight = highlightWorkItemIds.Contains(item.Id);
+            var highlight = options.HighlightedWorkItemIds.Contains(item.Id);
 
             attributes["label"] = $"<<table border=\"0\"><tr><td>{metadata}</td></tr><tr><td>{name}</td></tr></table>>";
             attributes["shape"] = "box";
@@ -65,6 +67,14 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          builder.AppendLine("}");
 
          return builder.ToString();
+      }
+
+      public class Options
+      {
+         public string AzureDevOpsOrganization { get; set; }
+         public string AzureDevOpsProject { get; set; }
+         public ISet<int> HighlightedWorkItemIds { get; set; }
+         public string RankDir { get; set; }
       }
    }
 }

@@ -41,7 +41,13 @@ namespace AzureDevOpsWorkItemVisualizer.Console
          var crawler = new DirectLinksCrawler(client);
          var data = await crawler.GetData(workItemIds, includeWorkItemTypes, includeFinishedWorkItems: false);
 
-         var graph = new GraphGenerator().GenerateGraph(data, workItemIds, "LR");
+         var graph = new GraphGenerator().GenerateGraph(data, new GraphGenerator.Options
+         {
+            AzureDevOpsOrganization = options.Organization,
+            AzureDevOpsProject = options.Project,
+            HighlightedWorkItemIds = workItemIds,
+            RankDir = "LR"
+         });
 
          // http://magjac.com/graphviz-visual-editor/ can be used to test the graph
 
