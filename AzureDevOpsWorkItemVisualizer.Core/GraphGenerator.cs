@@ -39,8 +39,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          {
             var attributes = new Dictionary<string, string>();
 
-            var link = $"<a href=\"https://dev.azure.com/{options.AzureDevOpsOrganization}/{options.AzureDevOpsProject}/_workitems/edit/{item.Id}\">{item.Type} {item.Id}</a>";
-            var segments = new object[] { link, item.State, item.Tags.Join(", "), item.AssignedTo };
+            var segments = new object[] { $"{item.Type} {item.Id}", item.State, item.Tags.Join(", "), item.AssignedTo };
             var metadata = string.Join(" / ", segments.Select(x => x.ToString()).Where(x => !string.IsNullOrWhiteSpace(x)));
 
             var name = WebUtility.HtmlEncode(item.Name);
@@ -54,6 +53,9 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             attributes["fillcolor"] = item.IsFinished ? "transparent" : BackgroundColors[item.Type];
             attributes["fontcolor"] = item.IsFinished ? "Black" : FontColors[item.Type];
             attributes["fontsize"] = highlight ? "18" : "14";
+            attributes["URL"] = $"https://dev.azure.com/{options.AzureDevOpsOrganization}/{options.AzureDevOpsProject}/_workitems/edit/{item.Id}";
+            attributes["target"] = "_blank";
+
             builder.AppendLine($"  {item.Id} [{string.Join(" ", attributes.Select(x => $"{x.Key}={x.Value}"))}]");
          }
 
