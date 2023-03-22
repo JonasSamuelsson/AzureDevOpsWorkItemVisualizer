@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
-   public class IndirectLinksCrawler : ICrawler
+   public class IndirectLinksCrawler : Crawler
    {
       private readonly IAzureDevOpsClient _client;
 
@@ -15,7 +15,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          _client = client;
       }
 
-      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems)
+      public override async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems)
       {
          var result = await _client.GetData(workItemIds, workItemTypes, includeFinishedWorkItems);
 

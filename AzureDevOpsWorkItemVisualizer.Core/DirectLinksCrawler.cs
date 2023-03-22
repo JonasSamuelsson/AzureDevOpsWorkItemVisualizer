@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using AzureDevOpsWorkItemVisualizer.Core.Model;
+using Handyman.Extensions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AzureDevOpsWorkItemVisualizer.Core.Model;
-using Handyman.Extensions;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
-   public class DirectLinksCrawler : ICrawler
+   public class DirectLinksCrawler : Crawler
    {
       private readonly IAzureDevOpsClient _client;
 
@@ -15,7 +15,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          _client = client;
       }
 
-      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems)
+      public override async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems)
       {
          var fromWorkItemIds = workItemIds.ToSet();
          var toWorkItemIds = workItemIds.ToSet();

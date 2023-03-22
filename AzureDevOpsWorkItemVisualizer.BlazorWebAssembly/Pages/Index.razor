@@ -54,6 +54,8 @@
                   <option value="left-right">Left to right</option>
                   <option value="top-down">Top down</option>
                </select>
+               <input id="optimizeLinks" @bind="_editorValues.OptimizeLinks" type="checkbox" />
+               <label for="optimizeLinks">Optimize links</label>
             </div>
          </div>
          <div>
@@ -124,15 +126,20 @@
          var crawler = _editorValues.IncludeIndirectWorkItems
             ? (ICrawler)new IndirectLinksCrawler(client)
             : new DirectLinksCrawler(client);
-         var data = await crawler.GetData(workItemIds, workItemTypes, _editorValues.IncludeFinishedWorkItems);
+         var crawlerOptions = new CrawlerOptions
+            {
+               IncludeFinishedWorkItems = _editorValues.IncludeFinishedWorkItems,
+               OptimizeLinks = _editorValues.OptimizeLinks
+            };
+         var data = await crawler.GetData(workItemIds, workItemTypes, crawlerOptions);
          var rankdir = _editorValues.Layout == "left-right" ? "LR" : "TD";
          var graph = new GraphGenerator().GenerateGraph(data, new GraphGenerator.Options
-         {
-            AzureDevOpsOrganization = _editorValues.Organization,
-            AzureDevOpsProject = _editorValues.Project,
-            HighlightedWorkItemIds = workItemIds,
-            RankDir = rankdir
-         });
+            {
+               AzureDevOpsOrganization = _editorValues.Organization,
+               AzureDevOpsProject = _editorValues.Project,
+               HighlightedWorkItemIds = workItemIds,
+               RankDir = rankdir
+            });
 
          Console.WriteLine(graph);
 
@@ -166,6 +173,7 @@
       _editorValues.IncludePbis = values?.IncludePbis ?? true;
       _editorValues.IncludeTasks = values?.IncludeTasks ?? false;
       _editorValues.Layout = values?.Layout == "top-down" ? "top-down" : "left-right";
+      _editorValues.OptimizeLinks = values?.OptimizeLinks ?? false;
 
       var query = new Uri(NavigationManager.Uri).ParseQueryString();
 
@@ -182,6 +190,7 @@
          LoadEditorValue<bool>("indirect", query, x => _editorValues.IncludeIndirectWorkItems = x);
          LoadEditorValue<bool>("finished", query, x => _editorValues.IncludeFinishedWorkItems = x);
          LoadEditorValue<string>("layout", query, x => _editorValues.Layout = x);
+         LoadEditorValue<bool>("optimize-links", query, x => _editorValues.OptimizeLinks = x);
 
          NavigationManager.NavigateTo(NavigationManager.BaseUri);
       }
@@ -213,6 +222,7 @@
       StoreEditorValue("indirect", _editorValues.IncludeIndirectWorkItems, dictionary);
       StoreEditorValue("finished", _editorValues.IncludeFinishedWorkItems, dictionary);
       StoreEditorValue("layout", _editorValues.Layout, dictionary);
+      StoreEditorValue("optimize-links", _editorValues.OptimizeLinks, dictionary);
 
       var uri = $"{NavigationManager.BaseUri}?{string.Join("&", dictionary.Select(x => $"{x.Key}={x.Value}"))}";
 
@@ -249,5 +259,6 @@
       public bool IncludeFinishedWorkItems { get; set; }
       public bool IncludeIndirectWorkItems { get; set; }
       public string Layout { get; set; }
+      public bool OptimizeLinks { get; set; }
    }
 }
