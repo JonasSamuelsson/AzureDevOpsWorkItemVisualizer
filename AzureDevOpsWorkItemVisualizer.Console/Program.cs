@@ -39,7 +39,7 @@ namespace AzureDevOpsWorkItemVisualizer.Console
 
          var client = new AzureDevOpsClient(options);
          var crawler = new DirectLinksCrawler(client);
-         var data = await crawler.GetWorkItemCollection(workItemIds, includeWorkItemTypes, includeFinishedWorkItems: false);
+         var data = await crawler.GetData(workItemIds, includeWorkItemTypes, includeFinishedWorkItems: false);
 
          var graph = new GraphGenerator().GenerateGraph(data, new GraphGenerator.Options
          {

@@ -14,7 +14,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Tests
       {
          var crawler = new DirectLinksCrawler(TestClient.Create());
 
-         var collection = await crawler.GetWorkItemCollection(new HashSet<int> { 2 }, new HashSet<WorkItemType> { WorkItemType.Feature }, false);
+         var collection = await crawler.GetData(new HashSet<int> { 2 }, new HashSet<WorkItemType> { WorkItemType.Feature }, false);
 
          collection.Links.ShouldContain(x => x.FromWorkItemId == 1 && x.ToWorkItemId == 2);
          collection.Links.ShouldContain(x => x.FromWorkItemId == 2 && x.ToWorkItemId == 3);
