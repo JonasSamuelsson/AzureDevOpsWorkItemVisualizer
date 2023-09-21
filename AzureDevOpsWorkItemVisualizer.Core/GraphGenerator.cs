@@ -39,7 +39,8 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          {
             var attributes = new Dictionary<string, string>();
 
-            var segments = new object[] { $"{item.Type} {item.Id}", item.State, item.Tags.Join(", "), item.AssignedTo };
+            var commits = item.Commits == 0 ? "" : item.Commits == 1 ? $"{item.Commits} commit" : $"{item.Commits} commits";
+            var segments = new object[] { $"{item.Type} {item.Id}", item.State, item.Tags.Join(", "), item.AssignedTo, commits };
             var metadata = string.Join(" / ", segments.Select(x => x.ToString()).Where(x => !string.IsNullOrWhiteSpace(x)));
 
             var name = WebUtility.HtmlEncode(item.Name);

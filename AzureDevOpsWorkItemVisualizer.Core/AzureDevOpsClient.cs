@@ -3,6 +3,7 @@ using Handyman.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -98,6 +99,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             .ToList();
       }
 
+      [DebuggerDisplay("Id {Id}")]
       public class DevOpsItem
       {
          public int Id { get; set; }
@@ -105,30 +107,26 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          public DevOpsRelation[] Relations { get; set; }
       }
 
+      [DebuggerDisplay("{Type} ; {State} ; {Title}")]
       public class DevOpsItemFields
       {
-         [JsonProperty("System.AssignedTo")]
-         public DevOpsItemAssignee AssignedTo { get; set; }
+         [JsonProperty("System.AssignedTo")] public DevOpsItemAssignee AssignedTo { get; set; }
 
-         [JsonProperty("System.State")]
-         public string State { get; set; }
+         [JsonProperty("System.State")] public string State { get; set; }
 
-         [JsonProperty("System.Tags")]
-         public string Tags { get; set; }
+         [JsonProperty("System.Tags")] public string Tags { get; set; }
 
-         [JsonProperty("System.Title")]
-         public string Title { get; set; }
+         [JsonProperty("System.Title")] public string Title { get; set; }
 
-         [JsonProperty("System.WorkItemType")]
-         public string Type { get; set; }
+         [JsonProperty("System.WorkItemType")] public string Type { get; set; }
       }
 
       public class DevOpsItemAssignee
       {
-         [JsonProperty("DisplayName")]
-         public string Name { get; set; }
+         [JsonProperty("DisplayName")] public string Name { get; set; }
       }
 
+      [DebuggerDisplay("{Rel} {Attributes.Name}")]
       public class DevOpsRelation
       {
          public string Rel { get; set; }

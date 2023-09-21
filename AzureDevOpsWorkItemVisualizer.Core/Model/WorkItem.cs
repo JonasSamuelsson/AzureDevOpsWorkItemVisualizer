@@ -8,6 +8,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
    public class WorkItem
    {
       public string AssignedTo { get; set; }
+      public int Commits { get; set; }
       public int Id { get; set; }
       public bool IsFinished { get; set; }
       public string Name { get; set; }
@@ -53,6 +54,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
          workItem = new WorkItem
          {
             AssignedTo = item.Fields.AssignedTo?.Name ?? string.Empty,
+            Commits = item.Relations.Count(x => x.Attributes.Name == "GitHub Commit"),
             Id = item.Id,
             IsFinished = IsFinishedState(item.Fields.State),
             Name = item.Fields.Title,
