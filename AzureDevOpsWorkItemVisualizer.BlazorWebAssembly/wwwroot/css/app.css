@@ -17,3 +17,13 @@ input {
 input[type=text], input[type=password] {
    width: 100%;
 }
+
+#version-info {
+   position: fixed;
+   left: 50%;
+   bottom: 0px;
+   transform: translate(-50%, -50%);
+   margin: 0 auto;
+   font-size: 0.6em;
+   color: #aaa
+}
