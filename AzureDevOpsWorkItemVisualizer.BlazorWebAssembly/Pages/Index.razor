@@ -28,9 +28,10 @@
                <input id="storePat" @bind="_editorValues.StorePersonalAccessToken" type="checkbox" />
                <label for="storePat">Store personal access token</label>
             </div>
-            <div><label for="ids">Work item ids</label></div>
-            <div><input id="ids" @bind="_editorValues.WorkItemIds" type="text" /></div>
             <div>
+               <label for="ids">Work items</label>
+               <input id="ids" @bind="_editorValues.WorkItemIds" type="text" placeholder="id1 id2" />
+               <br />
                <input id="includeEpics" @bind="_editorValues.IncludeEpics" type="checkbox" />
                <label for="includeEpics">Epics</label>
                <input id="includeFeatures" @bind="_editorValues.IncludeFeatures" type="checkbox" />
@@ -42,14 +43,15 @@
                <label for="includeBugs">Bugs</label>
                <input id="includeTasks" @bind="_editorValues.IncludeTasks" type="checkbox" />
                <label for="includeTasks">Tasks</label>
-            </div>
-            <div>
-               <input id="includeIndirect" @bind="_editorValues.IncludeIndirectWorkItems" type="checkbox" />
-               <label for="includeIndirect">Indirect</label>
+               <br />
                <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
                <label for="includeFinished">Finished</label>
+               <input id="includeIndirect" @bind="_editorValues.IncludeIndirectWorkItems" type="checkbox" />
+               <label for="includeIndirect">Indirect</label>
             </div>
             <div>
+               <label>Layout</label>
+               <br />
                <select @bind="_editorValues.Layout">
                   <option value="left-right">Left to right</option>
                   <option value="top-down">Top down</option>
