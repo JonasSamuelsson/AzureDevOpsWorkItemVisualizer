@@ -31,7 +31,7 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Update version info
-      run: '[System.IO.File]::WriteAllText("${{ env.WORKING_DIRECTORY }}/wwwroot/index.html", [System.IO.File]::ReadAllText("${{ env.WORKING_DIRECTORY }}/wwwroot/index.html").Replace("v###", [System.DateTime]::UtcNow.ToString("yyyy.M.dd.HHmm")))'
+      run: '[System.IO.File]::WriteAllText("${{ env.WORKING_DIRECTORY }}/wwwroot/index.html", [System.IO.File]::ReadAllText("${{ env.WORKING_DIRECTORY }}/wwwroot/index.html").Replace("v###", [System.DateTime]::UtcNow.ToString("vyyyy.M.dd.HHmm")))'
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
