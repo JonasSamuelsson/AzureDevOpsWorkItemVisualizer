@@ -1,18 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-  </PropertyGroup>
+   <!-- target framework set in Directory.Build.props -->
 
-  <ItemGroup>
-    <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
-    <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
-  </ItemGroup>
+   <ItemGroup>
+      <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
+      <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AzureDevOpsWorkItemVisualizer.Core\AzureDevOpsWorkItemVisualizer.Core.csproj" />
-  </ItemGroup>
+   <ItemGroup>
+      <ProjectReference Include="..\AzureDevOpsWorkItemVisualizer.Core\AzureDevOpsWorkItemVisualizer.Core.csproj" />
+   </ItemGroup>
 
 </Project>

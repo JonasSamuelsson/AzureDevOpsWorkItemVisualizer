@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsWorkItemVisualizer.Core", "AzureDevOpsWorkItemVisualizer.Core\AzureDevOpsWorkItemVisualizer.Core.csproj", "{36DD8BAD-D684-491D-A824-D3811ED9DE72}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsWorkItemVisualizer.Console", "AzureDevOpsWorkItemVisualizer.Console\AzureDevOpsWorkItemVisualizer.Console.csproj", "{61B43440-3340-405F-9636-4AC882E1FC07}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsWorkItemVisualizer.BlazorWebAssembly", "AzureDevOpsWorkItemVisualizer.BlazorWebAssembly\AzureDevOpsWorkItemVisualizer.BlazorWebAssembly.csproj", "{168D1F49-6D78-434B-8903-976F9B5C38AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C77EFF2E-E1C6-48E8-9B69-7DA1250E11BF}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

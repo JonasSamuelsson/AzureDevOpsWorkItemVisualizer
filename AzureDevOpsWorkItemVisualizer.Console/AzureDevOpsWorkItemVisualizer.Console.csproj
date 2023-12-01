@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+   <PropertyGroup>
+      <OutputType>Exe</OutputType>
+      <!-- target framework set in Directory.Build.props -->
+   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AzureDevOpsWorkItemVisualizer.Core\AzureDevOpsWorkItemVisualizer.Core.csproj" />
-  </ItemGroup>
+   <ItemGroup>
+      <ProjectReference Include="..\AzureDevOpsWorkItemVisualizer.Core\AzureDevOpsWorkItemVisualizer.Core.csproj" />
+   </ItemGroup>
 
 </Project>
