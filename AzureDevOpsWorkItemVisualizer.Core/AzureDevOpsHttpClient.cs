@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Handyman.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Handyman.Extensions;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
@@ -44,7 +44,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          {
             Headers =
             {
-               Accept = { new MediaTypeWithQualityHeaderValue("application/json")},
+               Accept = { new MediaTypeWithQualityHeaderValue("application/json") },
                Authorization = new AuthenticationHeaderValue("Basic", auth)
             }
          };
