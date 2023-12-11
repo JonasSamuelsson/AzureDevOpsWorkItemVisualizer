@@ -53,8 +53,10 @@
                <label>Layout</label>
                <br />
                <select @bind="_editorValues.Layout">
-                  <option value="left-right">Left to right</option>
-                  <option value="top-down">Top down</option>
+                  <option value="LR">Left to right</option>
+                  <option value="TD">Top down</option>
+                  <option value="RL">Right to left</option>
+                  <option value="BU">Bottom up</option>
                </select>
                <input id="optimizeLinks" @bind="_editorValues.OptimizeLinks" type="checkbox" />
                <label for="optimizeLinks">Optimize links</label>
@@ -134,7 +136,7 @@
                OptimizeLinks = _editorValues.OptimizeLinks
             };
          var data = await crawler.GetData(workItemIds, workItemTypes, crawlerOptions);
-         var rankdir = _editorValues.Layout == "left-right" ? "LR" : "TD";
+         var rankdir = _editorValues.Layout;
          var graph = new GraphGenerator().GenerateGraph(data, new GraphGenerator.Options
             {
                AzureDevOpsOrganization = _editorValues.Organization,
@@ -162,6 +164,12 @@
       var empty = "";
       var values = LocalStorage.GetItem<EditorValues>("editor");
 
+      var layout = values?.Layout ?? "LR";
+      if (layout.Contains("-"))
+      {
+         layout = "LR";
+      }
+
       _editorValues.Organization = values?.Organization ?? empty;
       _editorValues.Project = values?.Project ?? empty;
       _editorValues.PersonalAccessToken = values?.PersonalAccessToken ?? empty;
@@ -174,7 +182,7 @@
       _editorValues.IncludeIndirectWorkItems = values?.IncludeIndirectWorkItems ?? false;
       _editorValues.IncludePbis = values?.IncludePbis ?? true;
       _editorValues.IncludeTasks = values?.IncludeTasks ?? false;
-      _editorValues.Layout = values?.Layout == "top-down" ? "top-down" : "left-right";
+      _editorValues.Layout = layout;
       _editorValues.OptimizeLinks = values?.OptimizeLinks ?? false;
 
       var query = new Uri(NavigationManager.Uri).ParseQueryString();
