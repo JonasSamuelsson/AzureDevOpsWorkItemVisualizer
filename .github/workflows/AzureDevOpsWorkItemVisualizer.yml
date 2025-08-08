@@ -32,18 +32,25 @@ jobs:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Update version info
       run: '[System.IO.File]::WriteAllText("${{ env.WORKING_DIRECTORY }}/wwwroot/index.html", [System.IO.File]::ReadAllText("${{ env.WORKING_DIRECTORY }}/wwwroot/index.html").Replace("v###", [System.DateTime]::UtcNow.ToString("vyyyy.M.d.Hmm")))'
+      shell: pwsh
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+      shell: pwsh
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      shell: pwsh
     - name: Restore tests
       run: dotnet restore "${{ env.TESTS_WORKING_DIRECTORY }}"
+      shell: pwsh
     - name: Build tests
       run: dotnet build "${{ env.TESTS_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      shell: pwsh
     - name: Run tests
       run: dotnet test "${{ env.TESTS_WORKING_DIRECTORY }}" --no-build
+      shell: pwsh
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      shell: pwsh
     - name: Deploy
       if: ${{ github.event.inputs.deploy == 'true' }}
       uses: azure/webapps-deploy@v2
