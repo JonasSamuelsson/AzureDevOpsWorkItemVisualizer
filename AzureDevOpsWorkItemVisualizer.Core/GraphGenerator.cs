@@ -78,6 +78,19 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             builder.AppendLine($"  {link.FromWorkItemId} -> {link.ToWorkItemId} [{string.Join(" ", attributes.Select(x => $"{x.Key}={x.Value}"))}]");
          }
 
+         var sameRankLinks = data.Links
+            .SelectMany(x => new[] { (WorkItemId: x.FromWorkItemId, Link: x), (WorkItemId: x.ToWorkItemId, Link: x) })
+            .GroupBy(x => x.WorkItemId, x => x.Link)
+            .Where(g => g.Count() == 1)
+            .Select(g => g.Single())
+            .Where(x => x.Type == LinkType.Related)
+            .ToList();
+
+         foreach (var link in sameRankLinks.OrderBy(x => x.FromWorkItemId).ThenBy(x => x.ToWorkItemId))
+         {
+            builder.AppendLine($"  {{rank=same;{link.FromWorkItemId};{link.ToWorkItemId}}}");
+         }
+
          builder.AppendLine("}");
 
          return builder.ToString();
