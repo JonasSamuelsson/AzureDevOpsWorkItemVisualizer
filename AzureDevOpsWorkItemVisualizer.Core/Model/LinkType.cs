@@ -3,6 +3,7 @@
    public enum LinkType
    {
       HasChild,
-      DependsOn
+      DependsOn,
+      Related
    }
 }

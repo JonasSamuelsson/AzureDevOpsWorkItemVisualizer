@@ -46,8 +46,6 @@
                <br />
                <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
                <label for="includeFinished">Finished</label>
-               <input id="includeIndirect" @bind="_editorValues.IncludeIndirectWorkItems" type="checkbox" />
-               <label for="includeIndirect">Indirect</label>
             </div>
             <div>
                <label>Layout</label>
@@ -127,9 +125,7 @@
                PersonalAccessToken = _editorValues.PersonalAccessToken,
                Project = _editorValues.Project
             });
-         var crawler = _editorValues.IncludeIndirectWorkItems
-            ? (ICrawler)new IndirectLinksCrawler(client)
-            : new DirectLinksCrawler(client);
+         var crawler = new Crawler(client);
          var crawlerOptions = new CrawlerOptions
             {
                IncludeFinishedWorkItems = _editorValues.IncludeFinishedWorkItems,
@@ -179,7 +175,6 @@
       _editorValues.IncludeEpics = values?.IncludeEpics ?? false;
       _editorValues.IncludeFeatures = values?.IncludeFeatures ?? true;
       _editorValues.IncludeFinishedWorkItems = values?.IncludeFinishedWorkItems ?? false;
-      _editorValues.IncludeIndirectWorkItems = values?.IncludeIndirectWorkItems ?? false;
       _editorValues.IncludePbis = values?.IncludePbis ?? true;
       _editorValues.IncludeTasks = values?.IncludeTasks ?? false;
       _editorValues.Layout = layout;
@@ -197,7 +192,6 @@
          LoadEditorValue<bool>("features", query, x => _editorValues.IncludeFeatures = x);
          LoadEditorValue<bool>("pbis", query, x => _editorValues.IncludePbis = x);
          LoadEditorValue<bool>("tasks", query, x => _editorValues.IncludeTasks = x);
-         LoadEditorValue<bool>("indirect", query, x => _editorValues.IncludeIndirectWorkItems = x);
          LoadEditorValue<bool>("finished", query, x => _editorValues.IncludeFinishedWorkItems = x);
          LoadEditorValue<string>("layout", query, x => _editorValues.Layout = x);
          LoadEditorValue<bool>("optimize-links", query, x => _editorValues.OptimizeLinks = x);
@@ -229,7 +223,6 @@
       StoreEditorValue("features", _editorValues.IncludeFeatures, dictionary);
       StoreEditorValue("pbis", _editorValues.IncludePbis, dictionary);
       StoreEditorValue("tasks", _editorValues.IncludeTasks, dictionary);
-      StoreEditorValue("indirect", _editorValues.IncludeIndirectWorkItems, dictionary);
       StoreEditorValue("finished", _editorValues.IncludeFinishedWorkItems, dictionary);
       StoreEditorValue("layout", _editorValues.Layout, dictionary);
       StoreEditorValue("optimize-links", _editorValues.OptimizeLinks, dictionary);
@@ -267,7 +260,6 @@
       public bool IncludeBugs { get; set; }
       public bool IncludeTasks { get; set; }
       public bool IncludeFinishedWorkItems { get; set; }
-      public bool IncludeIndirectWorkItems { get; set; }
       public string Layout { get; set; }
       public bool OptimizeLinks { get; set; }
    }

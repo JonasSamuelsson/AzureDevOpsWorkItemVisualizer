@@ -1,5 +1,6 @@
 ﻿using AzureDevOpsWorkItemVisualizer.Core.Model;
 using Handyman.Extensions;
+using Humanizer;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -60,10 +61,20 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             builder.AppendLine($"  {item.Id} [{string.Join(" ", attributes.Select(x => $"{x.Key}={x.Value}"))}]");
          }
 
-         foreach (var link in data.Links.OrderBy(x => x.Identifier))
+         foreach (var link in data.Links.OrderBy(x => x.FromWorkItemId).ThenBy(x => x.ToWorkItemId).ThenBy(x => x.Type))
          {
-            var attributes = new Dictionary<string, string>();
-            attributes["label"] = link.Type.ToString();
+            var attributes = new Dictionary<string, string>
+            {
+               ["label"] = $"\"{link.Type.ToString().Humanize()}\""
+            };
+
+            if (link.Type == LinkType.Related)
+            {
+               attributes["constraint"] = "false";
+               attributes["dir"] = "both";
+               attributes["style"] = "dashed";
+            }
+
             builder.AppendLine($"  {link.FromWorkItemId} -> {link.ToWorkItemId} [{string.Join(" ", attributes.Select(x => $"{x.Key}={x.Value}"))}]");
          }
 

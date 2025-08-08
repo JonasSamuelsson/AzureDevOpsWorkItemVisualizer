@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
-   public abstract class Crawler : ICrawler
+   public class Crawler : ICrawler
    {
+      private readonly IAzureDevOpsClient _client;
+
+      public Crawler(IAzureDevOpsClient client)
+      {
+         _client = client;
+      }
+
       public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, CrawlerOptions options)
       {
          var collection = await GetData(workItemIds, workItemTypes, options.IncludeFinishedWorkItems);
@@ -20,18 +27,68 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          return collection;
       }
 
-      public abstract Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems);
+      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems)
+      {
+         var allRelated = new HashSet<Link>();
+         var fromWorkItemIds = workItemIds.ToSet();
+         var toWorkItemIds = workItemIds.ToSet();
+
+         var result = new WorkItemCollection();
+
+         while (true)
+         {
+            workItemIds = fromWorkItemIds
+               .Concat(toWorkItemIds)
+               .Except(result.WorkItems.Select(x => x.Id))
+               .ToSet();
+
+            if (workItemIds.Any() == false)
+               break;
+
+            var response = await _client.GetData(workItemIds, workItemTypes, includeFinishedWorkItems);
+
+            response.WorkItems.ForEach(x => result.WorkItems.Add(x));
+
+            response.Links
+               .Where(x => x.Type == LinkType.Related)
+               .ForEach(x => allRelated.Add(x));
+
+            fromWorkItemIds = response.Links
+               .Where(x => x.Type != LinkType.Related)
+               .Where(x => fromWorkItemIds.Contains(x.FromWorkItemId))
+               .Visit(x => result.Links.Add(x))
+               .Select(x => x.ToWorkItemId)
+               .ToSet();
+
+            toWorkItemIds = response.Links
+               .Where(x => x.Type != LinkType.Related)
+               .Where(x => toWorkItemIds.Contains(x.ToWorkItemId))
+               .Visit(x => result.Links.Add(x))
+               .Select(x => x.FromWorkItemId)
+               .ToSet();
+         }
+
+         workItemIds = result.WorkItems
+            .Select(x => x.Id)
+            .ToSet();
+
+         allRelated
+            .Where(x => workItemIds.Contains(x.FromWorkItemId))
+            .Where(x => workItemIds.Contains(x.ToWorkItemId))
+            .ForEach(x => result.Links.Add(x));
+
+         return result;
+      }
 
       public static void OptimizeLinks(ISet<Link> links)
       {
-         var fromIds = links
-            .Select(x => x.FromWorkItemId)
-            .Distinct()
+         var candidates = links
+            .Where(x => x.Type != LinkType.Related)
             .ToList();
 
-         var linksByFromId = links.ToLookup(x => x.FromWorkItemId);
+         var linksByFromId = candidates.ToLookup(x => x.FromWorkItemId);
 
-         foreach (var link in links.ToList())
+         foreach (var link in candidates.ToList())
          {
             var sources = linksByFromId
                .GetElementsOrEmpty(link.FromWorkItemId)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AzureDevOpsWorkItemVisualizer.Core.Model
 {
-   [DebuggerDisplay("{Id}:{Type}")]
+   [DebuggerDisplay("{Type} {Id} {Name}")]
    public class WorkItem
    {
       public string AssignedTo { get; set; }

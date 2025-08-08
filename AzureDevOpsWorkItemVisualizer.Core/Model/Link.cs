@@ -49,7 +49,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
             return false;
          }
 
-         var isReversed = ReverseRelations.Contains(relationName);
+         var isReversed = IsReversed(relationName, sourceWorkItemId, targetWorkItemId);
 
          link = new Link
          {
@@ -61,12 +61,28 @@ namespace AzureDevOpsWorkItemVisualizer.Core.Model
          return true;
       }
 
+      private static bool IsReversed(string relationName, int sourceWorkItemId, int targetWorkItemId)
+      {
+         if (ReverseRelations.Contains(relationName))
+         {
+            return true;
+         }
+
+         if (relationName == "Related")
+         {
+            return sourceWorkItemId > targetWorkItemId;
+         }
+
+         return false;
+      }
+
       private static readonly Dictionary<string, LinkType> RelationLinkTypes = new Dictionary<string, LinkType>
       {
-         {"Child", LinkType.HasChild},
-         {"Parent", LinkType.HasChild},
-         {"Predecessor", LinkType.DependsOn},
-         {"Successor", LinkType.DependsOn}
+         { "Child", LinkType.HasChild },
+         { "Parent", LinkType.HasChild },
+         { "Predecessor", LinkType.DependsOn },
+         { "Related", LinkType.Related },
+         { "Successor", LinkType.DependsOn }
       };
 
       private static readonly ISet<string> ReverseRelations = new HashSet<string> { "Parent", "Successor" };
