@@ -29,7 +29,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
       public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems)
       {
-         var allRelated = new HashSet<Link>();
+         var allRelatedLinks = new HashSet<Link>();
          var fromWorkItemIds = workItemIds.ToSet();
          var toWorkItemIds = workItemIds.ToSet();
 
@@ -51,7 +51,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
             response.Links
                .Where(x => x.Type == LinkType.Related)
-               .ForEach(x => allRelated.Add(x));
+               .ForEach(x => allRelatedLinks.Add(x));
 
             fromWorkItemIds = response.Links
                .Where(x => x.Type != LinkType.Related)
@@ -72,10 +72,19 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             .Select(x => x.Id)
             .ToSet();
 
-         allRelated
-            .Where(x => workItemIds.Contains(x.FromWorkItemId))
-            .Where(x => workItemIds.Contains(x.ToWorkItemId))
-            .ForEach(x => result.Links.Add(x));
+         var relatedWorkItemIds = allRelatedLinks
+            .SelectMany(x => new[] { x.FromWorkItemId, x.ToWorkItemId })
+            .Where(x => !workItemIds.Contains(x))
+            .ToSet();
+
+         if (relatedWorkItemIds.Any())
+         {
+            var response = await _client.GetData(relatedWorkItemIds, workItemTypes, includeFinishedWorkItems);
+
+            response.WorkItems.ForEach(x => result.WorkItems.Add(x));
+         }
+
+         allRelatedLinks.ForEach(x => result.Links.Add(x));
 
          return result;
       }
