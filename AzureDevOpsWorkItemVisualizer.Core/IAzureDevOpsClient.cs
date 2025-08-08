@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using AzureDevOpsWorkItemVisualizer.Core.Model;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using AzureDevOpsWorkItemVisualizer.Core.Model;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
    public interface IAzureDevOpsClient
    {
-      Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinished);
+      Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeRelated, bool includeFinished);
    }
 }

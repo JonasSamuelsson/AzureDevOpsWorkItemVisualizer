@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AzureDevOpsWorkItemVisualizer.Core
 {
-   public class Crawler : ICrawler
+   public class Crawler
    {
       private readonly IAzureDevOpsClient _client;
 
@@ -15,9 +15,9 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          _client = client;
       }
 
-      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, CrawlerOptions options)
+      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, CrawlerOptions options)
       {
-         var collection = await GetData(workItemIds, workItemTypes, options.IncludeFinishedWorkItems);
+         var collection = await FetchData(workItemIds, options);
 
          if (options.OptimizeLinks)
          {
@@ -27,7 +27,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          return collection;
       }
 
-      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinishedWorkItems)
+      public async Task<WorkItemCollection> FetchData(ISet<int> workItemIds, CrawlerOptions options)
       {
          var allRelatedLinks = new HashSet<Link>();
          var fromWorkItemIds = workItemIds.ToSet();
@@ -45,7 +45,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             if (workItemIds.Any() == false)
                break;
 
-            var response = await _client.GetData(workItemIds, workItemTypes, includeFinishedWorkItems);
+            var response = await FetchData(_client, workItemIds, options);
 
             response.WorkItems.ForEach(x => result.WorkItems.Add(x));
 
@@ -79,7 +79,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
          if (relatedWorkItemIds.Any())
          {
-            var response = await _client.GetData(relatedWorkItemIds, workItemTypes, includeFinishedWorkItems);
+            var response = await FetchData(_client, relatedWorkItemIds, options);
 
             response.WorkItems.ForEach(x => result.WorkItems.Add(x));
          }
@@ -87,6 +87,15 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          allRelatedLinks.ForEach(x => result.Links.Add(x));
 
          return result;
+      }
+
+      private static Task<WorkItemCollection> FetchData(IAzureDevOpsClient client, ISet<int> workItemIds, CrawlerOptions options)
+      {
+         var workItemTypes = options.WorkItemTypes;
+         var includeRelatedWorkItems = options.IncludeRelatedWorkItems;
+         var includeFinishedWorkItems = options.IncludeFinishedWorkItems;
+
+         return client.GetData(workItemIds, workItemTypes, includeRelatedWorkItems, includeFinishedWorkItems);
       }
 
       public static void OptimizeLinks(ISet<Link> links)

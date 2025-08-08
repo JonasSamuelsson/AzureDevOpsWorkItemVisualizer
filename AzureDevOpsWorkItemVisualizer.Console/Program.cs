@@ -14,15 +14,15 @@ namespace AzureDevOpsWorkItemVisualizer.Console
    {
       public static async Task Main()
       {
-         var options = new AzureDevOpsClientOptions();
+         var clientOptions = new AzureDevOpsClientOptions();
          var workItemIds = new HashSet<int>();
 
 #if DEBUG
          if (TryReadSettings(out var settings))
          {
-            options.Organization = settings.GetValueOrDefault("Organization", () => string.Empty);
-            options.PersonalAccessToken = settings.GetValueOrDefault("PersonalAccessToken", () => string.Empty);
-            options.Project = settings.GetValueOrDefault("Project", () => string.Empty);
+            clientOptions.Organization = settings.GetValueOrDefault("Organization", () => string.Empty);
+            clientOptions.PersonalAccessToken = settings.GetValueOrDefault("PersonalAccessToken", () => string.Empty);
+            clientOptions.Project = settings.GetValueOrDefault("Project", () => string.Empty);
             workItemIds = settings.GetValueOrDefault("WorkItemIds", () => string.Empty)
                .Split(new[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
                .Select(int.Parse)
@@ -30,21 +30,26 @@ namespace AzureDevOpsWorkItemVisualizer.Console
          }
 #endif
 
-         var includeWorkItemTypes = new HashSet<WorkItemType>
-         {
-            WorkItemType.Epic,
-            WorkItemType.Feature,
-            WorkItemType.PBI
-         };
-
-         var client = new AzureDevOpsClient(options);
+         var client = new AzureDevOpsClient(clientOptions);
          var crawler = new Crawler(client);
-         var data = await crawler.GetData(workItemIds, includeWorkItemTypes, includeFinishedWorkItems: false);
+         var crawlerOptions = new CrawlerOptions
+         {
+            IncludeFinishedWorkItems = false,
+            IncludeRelatedWorkItems = false,
+            OptimizeLinks = true,
+            WorkItemTypes =
+            {
+               WorkItemType.Epic,
+               WorkItemType.Feature,
+               WorkItemType.PBI
+            }
+         };
+         var data = await crawler.FetchData(workItemIds, crawlerOptions);
 
          var graph = new GraphGenerator().GenerateGraph(data, new GraphGenerator.Options
          {
-            AzureDevOpsOrganization = options.Organization,
-            AzureDevOpsProject = options.Project,
+            AzureDevOpsOrganization = clientOptions.Organization,
+            AzureDevOpsProject = clientOptions.Project,
             HighlightedWorkItemIds = workItemIds,
             RankDir = "TD"
          });

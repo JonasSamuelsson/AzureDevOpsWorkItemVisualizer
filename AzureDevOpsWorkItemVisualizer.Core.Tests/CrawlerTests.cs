@@ -13,8 +13,18 @@ public class CrawlerTests
    public async Task ShouldGetData()
    {
       var crawler = new Crawler(TestClient.Create());
+      var options = new CrawlerOptions
+      {
+         IncludeFinishedWorkItems = false,
+         IncludeRelatedWorkItems = false,
+         OptimizeLinks = false,
+         WorkItemTypes =
+         {
+            WorkItemType.Feature
+         }
+      };
 
-      var collection = await crawler.GetData(new HashSet<int> { 2 }, new HashSet<WorkItemType> { WorkItemType.Feature }, false);
+      var collection = await crawler.FetchData(new HashSet<int> { 2 }, options);
 
       collection.Links.ShouldContain(x => x.FromWorkItemId == 1 && x.ToWorkItemId == 2);
       collection.Links.ShouldContain(x => x.FromWorkItemId == 2 && x.ToWorkItemId == 3);

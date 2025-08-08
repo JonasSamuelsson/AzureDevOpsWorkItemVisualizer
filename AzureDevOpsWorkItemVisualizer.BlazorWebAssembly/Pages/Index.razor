@@ -44,6 +44,8 @@
                <input id="includeTasks" @bind="_editorValues.IncludeTasks" type="checkbox" />
                <label for="includeTasks">Tasks</label>
                <br />
+               <input id="includeRelated" @bind="_editorValues.IncludeRelatedWorkItems" type="checkbox" />
+               <label for="includeRelated">Related</label>
                <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
                <label for="includeFinished">Finished</label>
             </div>
@@ -113,12 +115,6 @@
          _loading = true;
 
          var workItemIds = ParseIds();
-         var workItemTypes = new HashSet<WorkItemType>();
-         if (_editorValues.IncludeBugs) workItemTypes.Add(WorkItemType.Bug);
-         if (_editorValues.IncludeEpics) workItemTypes.Add(WorkItemType.Epic);
-         if (_editorValues.IncludeFeatures) workItemTypes.Add(WorkItemType.Feature);
-         if (_editorValues.IncludePbis) workItemTypes.Add(WorkItemType.PBI);
-         if (_editorValues.IncludeTasks) workItemTypes.Add(WorkItemType.Task);
          var client = new AzureDevOpsClient(new AzureDevOpsClientOptions
             {
                Organization = _editorValues.Organization,
@@ -129,9 +125,15 @@
          var crawlerOptions = new CrawlerOptions
             {
                IncludeFinishedWorkItems = _editorValues.IncludeFinishedWorkItems,
+               IncludeRelatedWorkItems = _editorValues.IncludeRelatedWorkItems,
                OptimizeLinks = _editorValues.OptimizeLinks
             };
-         var data = await crawler.GetData(workItemIds, workItemTypes, crawlerOptions);
+         if (_editorValues.IncludeBugs) crawlerOptions.WorkItemTypes.Add(WorkItemType.Bug);
+         if (_editorValues.IncludeEpics) crawlerOptions.WorkItemTypes.Add(WorkItemType.Epic);
+         if (_editorValues.IncludeFeatures) crawlerOptions.WorkItemTypes.Add(WorkItemType.Feature);
+         if (_editorValues.IncludePbis) crawlerOptions.WorkItemTypes.Add(WorkItemType.PBI);
+         if (_editorValues.IncludeTasks) crawlerOptions.WorkItemTypes.Add(WorkItemType.Task);
+         var data = await crawler.GetData(workItemIds, crawlerOptions);
          var rankdir = _editorValues.Layout;
          var graph = new GraphGenerator().GenerateGraph(data, new GraphGenerator.Options
             {
@@ -176,6 +178,7 @@
       _editorValues.IncludeFeatures = values?.IncludeFeatures ?? true;
       _editorValues.IncludeFinishedWorkItems = values?.IncludeFinishedWorkItems ?? false;
       _editorValues.IncludePbis = values?.IncludePbis ?? true;
+      _editorValues.IncludeRelatedWorkItems = values?.IncludeRelatedWorkItems ?? true;
       _editorValues.IncludeTasks = values?.IncludeTasks ?? false;
       _editorValues.Layout = layout;
       _editorValues.OptimizeLinks = values?.OptimizeLinks ?? false;
@@ -187,11 +190,12 @@
          LoadEditorValue<string>("organization", query, x => _editorValues.Organization = x);
          LoadEditorValue<string>("projects", query, x => _editorValues.Project = x);
          LoadEditorValue<string>("ids", query, x => _editorValues.WorkItemIds = x);
-         LoadEditorValue<bool>("bugs", query, x => _editorValues.IncludeBugs = x);
          LoadEditorValue<bool>("epics", query, x => _editorValues.IncludeEpics = x);
          LoadEditorValue<bool>("features", query, x => _editorValues.IncludeFeatures = x);
          LoadEditorValue<bool>("pbis", query, x => _editorValues.IncludePbis = x);
+         LoadEditorValue<bool>("bugs", query, x => _editorValues.IncludeBugs = x);
          LoadEditorValue<bool>("tasks", query, x => _editorValues.IncludeTasks = x);
+         LoadEditorValue<bool>("related", query, x => _editorValues.IncludeRelatedWorkItems = x);
          LoadEditorValue<bool>("finished", query, x => _editorValues.IncludeFinishedWorkItems = x);
          LoadEditorValue<string>("layout", query, x => _editorValues.Layout = x);
          LoadEditorValue<bool>("optimize-links", query, x => _editorValues.OptimizeLinks = x);
@@ -223,6 +227,7 @@
       StoreEditorValue("features", _editorValues.IncludeFeatures, dictionary);
       StoreEditorValue("pbis", _editorValues.IncludePbis, dictionary);
       StoreEditorValue("tasks", _editorValues.IncludeTasks, dictionary);
+      StoreEditorValue("related", _editorValues.IncludeRelatedWorkItems, dictionary);
       StoreEditorValue("finished", _editorValues.IncludeFinishedWorkItems, dictionary);
       StoreEditorValue("layout", _editorValues.Layout, dictionary);
       StoreEditorValue("optimize-links", _editorValues.OptimizeLinks, dictionary);
@@ -260,6 +265,7 @@
       public bool IncludeBugs { get; set; }
       public bool IncludeTasks { get; set; }
       public bool IncludeFinishedWorkItems { get; set; }
+      public bool IncludeRelatedWorkItems { get; set; }
       public string Layout { get; set; }
       public bool OptimizeLinks { get; set; }
    }

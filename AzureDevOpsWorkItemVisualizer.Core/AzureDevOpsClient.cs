@@ -24,7 +24,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          _itemCache = new Dictionary<int, DevOpsItem>();
       }
 
-      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeFinished)
+      public async Task<WorkItemCollection> GetData(ISet<int> workItemIds, ISet<WorkItemType> workItemTypes, bool includeRelated, bool includeFinished)
       {
          var result = new WorkItemCollection();
 
@@ -41,6 +41,9 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             foreach (var relation in item.Relations)
             {
                if (Link.TryCreate(item.Id, relation.TargetWorkItemId, relation.Attributes.Name, out var link) == false)
+                  continue;
+
+               if (link.Type == LinkType.Related && !includeRelated)
                   continue;
 
                linkCandidates.Add(new LinkCandidate
