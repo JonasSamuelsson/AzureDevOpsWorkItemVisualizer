@@ -35,7 +35,7 @@ namespace AzureDevOpsWorkItemVisualizer.Console
          var crawlerOptions = new CrawlerOptions
          {
             IncludeFinishedWorkItems = false,
-            IncludeRelatedWorkItems = false,
+            IncludeRelatedWorkItems = true,
             OptimizeLinks = true,
             WorkItemTypes =
             {
