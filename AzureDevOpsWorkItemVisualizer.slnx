@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Project Path="AzureDevOpsWorkItemVisualizer.BlazorWebAssembly/AzureDevOpsWorkItemVisualizer.BlazorWebAssembly.csproj" />
+  <Project Path="AzureDevOpsWorkItemVisualizer.Console/AzureDevOpsWorkItemVisualizer.Console.csproj" />
+  <Project Path="AzureDevOpsWorkItemVisualizer.Core.Tests/AzureDevOpsWorkItemVisualizer.Core.Tests.csproj" />
+  <Project Path="AzureDevOpsWorkItemVisualizer.Core/AzureDevOpsWorkItemVisualizer.Core.csproj" />
+</Solution>

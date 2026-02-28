@@ -17,7 +17,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: AzureDevOpsWorkItemVisualizer.BlazorWebAssembly/publish
   AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AzureDevOpsWorkItemVisualizer_14d0 }}
   CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 8.0.x
+  DOTNET_CORE_VERSION: 10.0.x
   WORKING_DIRECTORY: AzureDevOpsWorkItemVisualizer.BlazorWebAssembly
   TESTS_WORKING_DIRECTORY: AzureDevOpsWorkItemVisualizer.Core.Tests
 

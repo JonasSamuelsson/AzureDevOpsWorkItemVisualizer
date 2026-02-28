@@ -30,8 +30,8 @@ namespace AzureDevOpsWorkItemVisualizer.Core
       public async Task<WorkItemCollection> FetchData(ISet<int> workItemIds, CrawlerOptions options)
       {
          var allRelatedLinks = new HashSet<Link>();
-         var fromWorkItemIds = workItemIds.ToSet();
-         var toWorkItemIds = workItemIds.ToSet();
+         var fromWorkItemIds = workItemIds.ToHashSet();
+         var toWorkItemIds = workItemIds.ToHashSet();
 
          var result = new WorkItemCollection();
 
@@ -40,7 +40,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             workItemIds = fromWorkItemIds
                .Concat(toWorkItemIds)
                .Except(result.WorkItems.Select(x => x.Id))
-               .ToSet();
+               .ToHashSet();
 
             if (workItemIds.Any() == false)
                break;
@@ -58,24 +58,24 @@ namespace AzureDevOpsWorkItemVisualizer.Core
                .Where(x => fromWorkItemIds.Contains(x.FromWorkItemId))
                .Visit(x => result.Links.Add(x))
                .Select(x => x.ToWorkItemId)
-               .ToSet();
+               .ToHashSet();
 
             toWorkItemIds = response.Links
                .Where(x => x.Type != LinkType.Related)
                .Where(x => toWorkItemIds.Contains(x.ToWorkItemId))
                .Visit(x => result.Links.Add(x))
                .Select(x => x.FromWorkItemId)
-               .ToSet();
+               .ToHashSet();
          }
 
          workItemIds = result.WorkItems
             .Select(x => x.Id)
-            .ToSet();
+            .ToHashSet();
 
          var relatedWorkItemIds = allRelatedLinks
             .SelectMany(x => new[] { x.FromWorkItemId, x.ToWorkItemId })
             .Where(x => !workItemIds.Contains(x))
-            .ToSet();
+            .ToHashSet();
 
          if (relatedWorkItemIds.Any())
          {

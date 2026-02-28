@@ -56,7 +56,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
          var ids = linkCandidates
             .Select(x => x.TargetWorkItemId)
-            .ToSet();
+            .ToHashSet();
 
          var items = (await GetWorkItems(ids)).ToDictionary(x => x.Id);
 
@@ -152,6 +152,6 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
       private readonly ISet<WorkItemType> AllWorkItemTypes = Enum.GetValues(typeof(WorkItemType))
          .Cast<WorkItemType>()
-         .ToSet();
+         .ToHashSet();
    }
 }
