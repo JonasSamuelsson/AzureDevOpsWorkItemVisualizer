@@ -14,65 +14,99 @@
 @inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 
-<div class="full-screen">
-   <div style="position: fixed; top: 10px; left: 10px;" @onload="LoadEditorValues">
-      <div style="background-color: #e5e5e5; border-radius: 10px; padding: 10px; width: 275px;">
-         <div hidden="@(_editorVisible == false)">
-            <div><label for="organization">Organization</label></div>
-            <div><input id="organization" @bind="_editorValues.Organization" type="text" /></div>
-            <div><label for="project">Project</label></div>
-            <div><input id="project" @bind="_editorValues.Project" type="text" /></div>
-            <div><label for="pat">Personal access token</label></div>
-            <div><input id="pat" @bind="_editorValues.PersonalAccessToken" type="password" /></div>
-            <div>
-               <input id="storePat" @bind="_editorValues.StorePersonalAccessToken" type="checkbox" />
-               <label for="storePat">Store personal access token</label>
+<div class="full-screen editor-page">
+   <div class="theme-backdrop" hidden="@(!_themeMenuOpen)" @onclick="CloseThemeMenu"></div>
+   <div class="theme-shell" role="group" aria-label="Theme">
+      <button type="button" class="theme-button theme-trigger" title="@GetThemeTitle()" aria-label="@GetThemeTitle()" aria-haspopup="true" aria-expanded="@_themeMenuOpen" @onclick="ToggleThemeMenu">
+         <span class="@GetThemeIconClass()" aria-hidden="true"></span>
+         <span class="oi oi-caret-bottom theme-trigger-caret"></span>
+      </button>
+      <div class="theme-menu" hidden="@(!_themeMenuOpen)">
+         <button type="button" class="@GetThemeButtonClass(ThemeSystem)" title="System theme" aria-label="System theme" @onclick="SetSystemTheme"><span class="oi oi-monitor theme-icon" aria-hidden="true"></span></button>
+         <button type="button" class="@GetThemeButtonClass(ThemeLight)" title="Light theme" aria-label="Light theme" @onclick="SetLightTheme"><span class="oi oi-sun theme-icon" aria-hidden="true"></span></button>
+         <button type="button" class="@GetThemeButtonClass(ThemeDark)" title="Dark theme" aria-label="Dark theme" @onclick="SetDarkTheme"><span class="oi oi-moon theme-icon" aria-hidden="true"></span></button>
+      </div>
+   </div>
+   <div class="editor-shell">
+      <div class="editor-card">
+         <div class="editor-content" hidden="@(_editorVisible == false)">
+            <div class="editor-field">
+               <label class="editor-label" for="organization">Organization</label>
+               <input class="editor-input" id="organization" @bind="_editorValues.Organization" type="text" />
             </div>
-            <div>
-               <label for="ids">Work items</label>
-               <input id="ids" @bind="_editorValues.WorkItemIds" type="text" placeholder="id1 id2" />
-               <br />
-               <input id="includeEpics" @bind="_editorValues.IncludeEpics" type="checkbox" />
-               <label for="includeEpics">Epics</label>
-               <input id="includeFeatures" @bind="_editorValues.IncludeFeatures" type="checkbox" />
-               <label for="includeFeatures">Features</label>
-               <input id="includePbis" @bind="_editorValues.IncludePbis" type="checkbox" />
-               <label for="includePbis">PBIs</label>
-               <br />
-               <input id="includeBugs" @bind="_editorValues.IncludeBugs" type="checkbox" />
-               <label for="includeBugs">Bugs</label>
-               <input id="includeTasks" @bind="_editorValues.IncludeTasks" type="checkbox" />
-               <label for="includeTasks">Tasks</label>
-               <br />
-               <input id="includeRelated" @bind="_editorValues.IncludeRelatedWorkItems" type="checkbox" />
-               <label for="includeRelated">Related</label>
-               <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
-               <label for="includeFinished">Finished</label>
+            <div class="editor-field">
+               <label class="editor-label" for="project">Project</label>
+               <input class="editor-input" id="project" @bind="_editorValues.Project" type="text" />
             </div>
-            <div>
-               <label>Layout</label>
-               <br />
-               <select @bind="_editorValues.Layout">
-                  <option value="LR">Left to right</option>
-                  <option value="TB">Top down</option>
-                  <option value="RL">Right to left</option>
-                  <option value="BT">Bottom up</option>
-               </select>
-               <input id="optimizeLinks" @bind="_editorValues.OptimizeLinks" type="checkbox" />
-               <label for="optimizeLinks">Optimize links</label>
+            <div class="editor-field">
+               <label class="editor-label" for="pat">Personal access token</label>
+               <input class="editor-input" id="pat" @bind="_editorValues.PersonalAccessToken" type="password" />
+            </div>
+            <div class="editor-field">
+               <label class="editor-check">
+                  <input id="storePat" @bind="_editorValues.StorePersonalAccessToken" type="checkbox" />
+                  <span>Store personal access token</span>
+               </label>
+            </div>
+            <div class="editor-field">
+               <label class="editor-label" for="ids">Work items</label>
+               <input class="editor-input" id="ids" @bind="_editorValues.WorkItemIds" type="text" placeholder="id1 id2" />
+               <div class="editor-checklist">
+                  <label class="editor-check">
+                     <input id="includeEpics" @bind="_editorValues.IncludeEpics" type="checkbox" />
+                     <span>Epics</span>
+                  </label>
+                  <label class="editor-check">
+                     <input id="includeFeatures" @bind="_editorValues.IncludeFeatures" type="checkbox" />
+                     <span>Features</span>
+                  </label>
+                  <label class="editor-check">
+                     <input id="includePbis" @bind="_editorValues.IncludePbis" type="checkbox" />
+                     <span>PBIs</span>
+                  </label>
+                  <label class="editor-check">
+                     <input id="includeBugs" @bind="_editorValues.IncludeBugs" type="checkbox" />
+                     <span>Bugs</span>
+                  </label>
+                  <label class="editor-check">
+                     <input id="includeTasks" @bind="_editorValues.IncludeTasks" type="checkbox" />
+                     <span>Tasks</span>
+                  </label>
+                  <label class="editor-check editor-check-related">
+                     <input id="includeRelated" @bind="_editorValues.IncludeRelatedWorkItems" type="checkbox" />
+                     <span>Related</span>
+                  </label>
+                  <label class="editor-check editor-check-finished">
+                     <input id="includeFinished" @bind="_editorValues.IncludeFinishedWorkItems" type="checkbox" />
+                     <span>Finished</span>
+                  </label>
+               </div>
+            </div>
+            <div class="editor-field">
+               <label class="editor-label" for="layout">Layout</label>
+               <div class="editor-layout-row">
+                  <select class="editor-select" id="layout" @bind="_editorValues.Layout">
+                     <option value="LR">Left to right</option>
+                     <option value="TB">Top down</option>
+                     <option value="RL">Right to left</option>
+                     <option value="BT">Bottom up</option>
+                  </select>
+                  <label class="editor-check">
+                     <input id="optimizeLinks" @bind="_editorValues.OptimizeLinks" type="checkbox" />
+                     <span>Optimize links</span>
+                  </label>
+               </div>
             </div>
          </div>
-         <div>
-            <button style="width: 90px" disabled="@(_loading)" @onclick="LoadWorkItems">
+         <div class="editor-actions">
+            <button class="editor-load-button" disabled="@(_loading)" @onclick="LoadWorkItems">
                <span hidden="@(_loading)">Load</span>
                <span hidden="@(!_loading)">Loading...</span>
             </button>
-            <div style="float: right; padding-top: 4px">
-               @*<span class="oi oi-link-intact"></span>*@
-               <a href="#" @onclick="CopyUriToClipboard">Copy url</a>
-               &nbsp;
-               <span class="oi oi-caret-top" hidden="@(!_editorVisible)" @onclick="ToggleEditorVisibility"></span>
-               <span class="oi oi-caret-bottom" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+            <div class="editor-link-actions">
+               <a href="#" class="editor-link" @onclick="CopyUriToClipboard">Copy url</a>
+               <span class="oi oi-caret-top editor-toggle" hidden="@(!_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+               <span class="oi oi-caret-bottom editor-toggle" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
             </div>
          </div>
       </div>
@@ -82,17 +116,22 @@
 
 @code {
    private readonly EditorValues _editorValues = new EditorValues();
+   private const string ThemeSystem = "system";
+   private const string ThemeLight = "light";
+   private const string ThemeDark = "dark";
    private bool _loading;
    private bool _editorVisible = true;
+   private bool _themeMenuOpen;
 
-   protected override void OnAfterRender(bool firstRender)
+   protected override async Task OnAfterRenderAsync(bool firstRender)
    {
       if (firstRender)
       {
          LoadEditorValues();
+         await ApplyTheme();
       }
 
-      base.OnAfterRender(firstRender);
+      await base.OnAfterRenderAsync(firstRender);
    }
 
    private ISet<int> ParseIds()
@@ -179,6 +218,7 @@
       _editorValues.IncludeTasks = values?.IncludeTasks ?? false;
       _editorValues.Layout = layout;
       _editorValues.OptimizeLinks = values?.OptimizeLinks ?? false;
+      _editorValues.Theme = NormalizeTheme(values?.Theme);
 
       var query = new Uri(NavigationManager.Uri).ParseQueryString();
 
@@ -196,6 +236,7 @@
          LoadEditorValue<bool>("finished", query, x => _editorValues.IncludeFinishedWorkItems = x);
          LoadEditorValue<string>("layout", query, x => _editorValues.Layout = x);
          LoadEditorValue<bool>("optimize-links", query, x => _editorValues.OptimizeLinks = x);
+         LoadEditorValue<string>("theme", query, x => _editorValues.Theme = NormalizeTheme(x));
 
          NavigationManager.NavigateTo(NavigationManager.BaseUri);
       }
@@ -228,6 +269,7 @@
       StoreEditorValue("finished", _editorValues.IncludeFinishedWorkItems, dictionary);
       StoreEditorValue("layout", _editorValues.Layout, dictionary);
       StoreEditorValue("optimize-links", _editorValues.OptimizeLinks, dictionary);
+      StoreEditorValue("theme", _editorValues.Theme, dictionary);
 
       var uri = $"{NavigationManager.BaseUri}?{string.Join("&", dictionary.Select(x => $"{x.Key}={x.Value}"))}";
 
@@ -242,6 +284,80 @@
    private void SaveEditorValues()
    {
       LocalStorage.SetItem("editor", _editorValues);
+   }
+
+   private Task SetSystemTheme()
+   {
+      return SetTheme(ThemeSystem);
+   }
+
+   private Task SetLightTheme()
+   {
+      return SetTheme(ThemeLight);
+   }
+
+   private Task SetDarkTheme()
+   {
+      return SetTheme(ThemeDark);
+   }
+
+   private async Task SetTheme(string theme)
+   {
+      _editorValues.Theme = NormalizeTheme(theme);
+      _themeMenuOpen = false;
+
+      SaveEditorValues();
+
+      await ApplyTheme();
+   }
+
+   private void ToggleThemeMenu()
+   {
+      _themeMenuOpen = !_themeMenuOpen;
+   }
+
+   private void CloseThemeMenu()
+   {
+      _themeMenuOpen = false;
+   }
+
+   private string GetThemeButtonClass(string theme)
+   {
+      return NormalizeTheme(_editorValues.Theme) == theme
+         ? "theme-button theme-button-active"
+         : "theme-button";
+   }
+
+   private string GetThemeIconClass()
+   {
+      return NormalizeTheme(_editorValues.Theme) switch
+      {
+         ThemeLight => "oi oi-sun theme-icon",
+         ThemeDark => "oi oi-moon theme-icon",
+         _ => "oi oi-monitor theme-icon"
+      };
+   }
+
+   private string GetThemeTitle()
+   {
+      return NormalizeTheme(_editorValues.Theme) switch
+      {
+         ThemeLight => "Theme: light",
+         ThemeDark => "Theme: dark",
+         _ => "Theme: system"
+      };
+   }
+
+   private async Task ApplyTheme()
+   {
+      _editorValues.Theme = NormalizeTheme(_editorValues.Theme);
+
+      await Javascript.InvokeVoidAsync("applyTheme", _editorValues.Theme);
+   }
+
+   private static string NormalizeTheme(string theme)
+   {
+      return theme is ThemeLight or ThemeDark ? theme : ThemeSystem;
    }
 
    private void ToggleEditorVisibility()
@@ -265,5 +381,6 @@
       public bool IncludeRelatedWorkItems { get; set; }
       public string Layout { get; set; }
       public bool OptimizeLinks { get; set; }
+      public string Theme { get; set; }
    }
 }
