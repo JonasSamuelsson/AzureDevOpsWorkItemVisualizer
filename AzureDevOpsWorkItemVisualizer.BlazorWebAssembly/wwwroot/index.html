@@ -64,7 +64,43 @@
       })();
 
       function updateGraph(content) {
-         d3.select("#graph").graphviz().renderDot(content);
+         return new Promise((resolve, reject) => {
+            let completed = false;
+            const finish = (callback, value) => {
+               if (completed) {
+                  return;
+               }
+
+               completed = true;
+               callback(value);
+            };
+            const normalizeError = (error) => {
+               if (error instanceof Error) {
+                  return error;
+               }
+
+               if (error && typeof error.message === "string") {
+                  return new Error(error.message);
+               }
+
+               return new Error(`Graph render failed: ${error ?? "unknown error"}`);
+            };
+
+            try {
+               const renderer = d3.select("#graph").graphviz();
+               if (typeof renderer.onerror === "function") {
+                  renderer.onerror((error) => {
+                     finish(reject, normalizeError(error));
+                  });
+               }
+
+               renderer.renderDot(content, () => {
+                  finish(resolve);
+               });
+            } catch (error) {
+               finish(reject, normalizeError(error));
+            }
+         });
       }
    </script>
 </body>

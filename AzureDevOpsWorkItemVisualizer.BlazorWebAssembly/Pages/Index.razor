@@ -100,6 +100,7 @@
          </div>
          <div class="editor-actions">
             <button class="editor-load-button" disabled="@(_loading)" @onclick="LoadWorkItems">
+               <span class="editor-load-spinner" hidden="@(!_loading)" aria-hidden="true"></span>
                <span hidden="@(_loading)">Load</span>
                <span hidden="@(!_loading)">Loading...</span>
             </button>
