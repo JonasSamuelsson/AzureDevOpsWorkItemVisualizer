@@ -81,6 +81,35 @@ html, body {
    background: var(--editor-bg);
 }
 
+.app-loading {
+   height: 100%;
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 10px;
+   color: var(--editor-muted);
+   font-size: 0.95rem;
+   font-weight: 600;
+   letter-spacing: 0.02em;
+}
+
+.app-loading::before {
+   content: "";
+   width: 14px;
+   height: 14px;
+   border-radius: 999px;
+   border: 2px solid var(--editor-border);
+   border-top-color: var(--editor-accent);
+   animation: app-loading-spin 0.9s linear infinite;
+}
+
+@keyframes app-loading-spin {
+   to {
+      transform: rotate(360deg);
+   }
+}
+
 #graph {
    background: var(--graph-bg);
 }
