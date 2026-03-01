@@ -10,24 +10,6 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 {
    public class GraphGenerator
    {
-      private static readonly Dictionary<WorkItemType, string> BackgroundColors = new Dictionary<WorkItemType, string>
-      {
-         { WorkItemType.Bug, "Red" },
-         { WorkItemType.Epic, "DarkOrange" },
-         { WorkItemType.Feature, "Indigo" },
-         { WorkItemType.PBI, "DeepSkyBlue" },
-         { WorkItemType.Task, "Yellow" }
-      };
-
-      private static readonly Dictionary<WorkItemType, string> FontColors = new Dictionary<WorkItemType, string>
-      {
-         { WorkItemType.Bug, "White" },
-         { WorkItemType.Epic, "White" },
-         { WorkItemType.Feature, "White" },
-         { WorkItemType.PBI, "Black" },
-         { WorkItemType.Task, "Black" }
-      };
-
       public string GenerateGraph(WorkItemCollection data, Options options)
       {
          var builder = new StringBuilder();
@@ -47,13 +29,22 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             var name = WebUtility.HtmlEncode(item.Name);
 
             var highlight = options.HighlightedWorkItemIds.Contains(item.Id);
+            var nodeTypeClass = GetWorkItemTypeClass(item.Type);
+            var nodeState = item.IsFinished ? "finished" : "active";
+            var nodeHighlight = highlight ? "highlighted" : "normal";
+            var nodeClasses = string.Join(" ", new[]
+            {
+               "wi-node",
+               $"wi-node-{nodeTypeClass}",
+               item.IsFinished ? "is-finished" : "is-active",
+               highlight ? "is-highlighted" : null
+            }.Where(x => !string.IsNullOrWhiteSpace(x)));
 
             attributes["label"] = $"<<table border=\"0\"><tr><td>{metadata}</td></tr><tr><td>{name}</td></tr></table>>";
+            attributes["id"] = $"\"wi-node-{nodeTypeClass}-{nodeState}-{nodeHighlight}-{item.Id}\"";
+            attributes["class"] = $"\"{nodeClasses}\"";
             attributes["shape"] = "box";
             attributes["style"] = highlight ? "\"bold,filled,rounded\"" : "\"filled,rounded\"";
-            attributes["color"] = item.IsFinished ? BackgroundColors[item.Type] : "Black";
-            attributes["fillcolor"] = item.IsFinished ? "transparent" : BackgroundColors[item.Type];
-            attributes["fontcolor"] = item.IsFinished ? "Black" : FontColors[item.Type];
             attributes["fontsize"] = highlight ? "18" : "14";
             attributes["URL"] = $"\"https://dev.azure.com/{options.AzureDevOpsOrganization}/{options.AzureDevOpsProject}/_workitems/edit/{item.Id}\"";
             attributes["target"] = "\"_blank\"";
@@ -63,9 +54,12 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
          foreach (var link in data.Links.OrderBy(x => x.FromWorkItemId).ThenBy(x => x.ToWorkItemId).ThenBy(x => x.Type))
          {
+            var linkTypeClass = link.Type.ToString().Kebaberize();
             var attributes = new Dictionary<string, string>
             {
-               ["label"] = $"\"{link.Type.ToString().Humanize()}\""
+               ["label"] = $"\"{link.Type.ToString().Humanize()}\"",
+               ["id"] = $"\"wi-link-{linkTypeClass}-{link.FromWorkItemId}-{link.ToWorkItemId}\"",
+               ["class"] = $"\"wi-link wi-link-{linkTypeClass}\""
             };
 
             if (link.Type == LinkType.Related)
@@ -94,6 +88,19 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          builder.AppendLine("}");
 
          return builder.ToString();
+      }
+
+      private static string GetWorkItemTypeClass(WorkItemType type)
+      {
+         return type switch
+         {
+            WorkItemType.Bug => "bug",
+            WorkItemType.Epic => "epic",
+            WorkItemType.Feature => "feature",
+            WorkItemType.PBI => "pbi",
+            WorkItemType.Task => "task",
+            _ => "unknown"
+         };
       }
 
       public class Options

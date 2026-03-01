@@ -10,6 +10,17 @@
    --editor-accent-hover: #1d4ed8;
    --editor-focus-ring: rgba(37, 99, 235, 0.25);
    --editor-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+   --graph-bg: #edf2fa;
+   --graph-link: #64748b;
+   --graph-link-related: #4f46e5;
+   --graph-label: #334155;
+   --graph-node-bug: #dc2626;
+   --graph-node-epic: #ea580c;
+   --graph-node-feature: #4f46e5;
+   --graph-node-pbi: #0ea5e9;
+   --graph-node-task: #eab308;
+   --graph-node-on-dark: #f8fafc;
+   --graph-node-on-light: #1e293b;
 }
 
 [data-theme="dark"] {
@@ -22,6 +33,17 @@
    --editor-accent-hover: #93c5fd;
    --editor-focus-ring: rgba(147, 197, 253, 0.32);
    --editor-shadow: 0 22px 44px rgba(2, 6, 23, 0.45);
+   --graph-bg: #060d1a;
+   --graph-link: #9fb0cc;
+   --graph-link-related: #93c5fd;
+   --graph-label: #d1ddf2;
+   --graph-node-bug: #dc2626;
+   --graph-node-epic: #c2410c;
+   --graph-node-feature: #4338ca;
+   --graph-node-pbi: #0ea5e9;
+   --graph-node-task: #f59e0b;
+   --graph-node-on-dark: #f8fafc;
+   --graph-node-on-light: #0b1220;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,6 +57,17 @@
       --editor-accent-hover: #93c5fd;
       --editor-focus-ring: rgba(147, 197, 253, 0.32);
       --editor-shadow: 0 22px 44px rgba(2, 6, 23, 0.45);
+      --graph-bg: #060d1a;
+      --graph-link: #9fb0cc;
+      --graph-link-related: #93c5fd;
+      --graph-label: #d1ddf2;
+      --graph-node-bug: #dc2626;
+      --graph-node-epic: #c2410c;
+      --graph-node-feature: #4338ca;
+      --graph-node-pbi: #0ea5e9;
+      --graph-node-task: #f59e0b;
+      --graph-node-on-dark: #f8fafc;
+      --graph-node-on-light: #0b1220;
    }
 }
 
@@ -46,6 +79,93 @@ html, body {
 
 .editor-page {
    background: var(--editor-bg);
+}
+
+#graph {
+   background: var(--graph-bg);
+}
+
+#graph .graph > polygon {
+   fill: var(--graph-bg) !important;
+   stroke: transparent !important;
+}
+
+#graph :is(.wi-node, [id^="wi-node-"], .node) {
+   --wi-node-accent: var(--editor-border);
+   --wi-node-fill: var(--editor-surface);
+   --wi-node-stroke: var(--editor-border);
+   --wi-node-text: var(--editor-text);
+}
+
+#graph :is(.wi-node.is-active, [id*="-active-"]) {
+   --wi-node-fill: var(--wi-node-accent);
+   --wi-node-stroke: var(--wi-node-accent);
+}
+
+#graph :is(.wi-node.is-finished, [id*="-finished-"]) {
+   --wi-node-fill: transparent;
+   --wi-node-stroke: var(--wi-node-accent);
+   --wi-node-text: var(--editor-text);
+}
+
+#graph :is(.wi-node.is-highlighted, [id*="-highlighted-"]) :is(path, polygon, ellipse, rect) {
+   stroke-width: 2.4px !important;
+}
+
+#graph :is(.wi-node, [id^="wi-node-"], .node) :is(path, polygon, ellipse, rect) {
+   fill: var(--wi-node-fill) !important;
+   stroke: var(--wi-node-stroke) !important;
+   transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+#graph :is(.wi-node, [id^="wi-node-"], .node) text {
+   fill: var(--wi-node-text) !important;
+}
+
+#graph :is(.wi-node-bug, [id^="wi-node-bug-"]) {
+   --wi-node-accent: var(--graph-node-bug);
+   --wi-node-text: var(--graph-node-on-dark);
+}
+
+#graph :is(.wi-node-epic, [id^="wi-node-epic-"]) {
+   --wi-node-accent: var(--graph-node-epic);
+   --wi-node-text: var(--graph-node-on-dark);
+}
+
+#graph :is(.wi-node-feature, [id^="wi-node-feature-"]) {
+   --wi-node-accent: var(--graph-node-feature);
+   --wi-node-text: var(--graph-node-on-dark);
+}
+
+#graph :is(.wi-node-pbi, [id^="wi-node-pbi-"]) {
+   --wi-node-accent: var(--graph-node-pbi);
+   --wi-node-text: var(--graph-node-on-light);
+}
+
+#graph :is(.wi-node-task, [id^="wi-node-task-"]) {
+   --wi-node-accent: var(--graph-node-task);
+   --wi-node-text: var(--graph-node-on-light);
+}
+
+#graph :is(.wi-link, [id^="wi-link-"], .edge) {
+   --wi-link-color: var(--graph-link);
+}
+
+#graph :is(.wi-link, [id^="wi-link-"], .edge) path {
+   stroke: var(--wi-link-color) !important;
+}
+
+#graph :is(.wi-link, [id^="wi-link-"], .edge) polygon {
+   stroke: var(--wi-link-color) !important;
+   fill: var(--wi-link-color) !important;
+}
+
+#graph :is(.wi-link, [id^="wi-link-"], .edge) text {
+   fill: var(--graph-label) !important;
+}
+
+#graph :is(.wi-link-related, [id^="wi-link-related-"]) {
+   --wi-link-color: var(--graph-link-related);
 }
 
 .theme-backdrop {
