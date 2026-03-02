@@ -151,6 +151,15 @@ html, body {
    fill: var(--wi-node-text) !important;
 }
 
+#graph :is(.wi-node, [id^="wi-node-"], .node) text tspan[font-family="remixicon"] {
+   fill: var(--graph-label) !important;
+   opacity: 0.74;
+   alignment-baseline: middle;
+   dominant-baseline: middle;
+   transform-box: fill-box;
+   transform-origin: center;
+}
+
 #graph :is(.wi-node-bug, [id^="wi-node-bug-"]) {
    --wi-node-accent: var(--graph-node-bug);
    --wi-node-text: var(--graph-node-on-dark);
@@ -252,8 +261,14 @@ html, body {
 }
 
 .theme-icon {
-   top: 0;
-   font-size: 0.9rem;
+   display: inline-block;
+   font-size: 0.95rem;
+   line-height: 1;
+}
+
+.icon-mirror-x {
+   display: inline-block;
+   transform: scaleX(-1);
 }
 
 .theme-button:hover {
@@ -442,6 +457,11 @@ html, body {
 }
 
 .editor-toggle {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 0.95rem;
+   line-height: 1;
    cursor: pointer;
    color: var(--editor-muted);
 }

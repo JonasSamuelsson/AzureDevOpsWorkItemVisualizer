@@ -10,6 +10,10 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 {
    public class GraphGenerator
    {
+      private const string AssigneeIcon = "&#xF264;";
+      private const string TagRightIcon = "&#xF023;";
+      private const string GithubIcon = "&#xEDCB;";
+
       public string GenerateGraph(WorkItemCollection data, Options options)
       {
          var builder = new StringBuilder();
@@ -23,8 +27,21 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             var attributes = new Dictionary<string, string>();
 
             var commits = item.Commits == 0 ? "" : item.Commits == 1 ? $"{item.Commits} commit" : $"{item.Commits} commits";
-            var segments = new object[] { $"{item.Type} {item.Id}", item.State, item.Tags.Join(", "), item.AssignedTo, commits };
-            var metadata = WebUtility.HtmlEncode(segments.Select(x => x.ToString()).Where(x => !string.IsNullOrWhiteSpace(x)).Join(" / "));
+            var workItemSegment = BuildMetadataSegment($"{item.Type} {item.Id}");
+            var stateSegment = BuildMetadataSegment(item.State);
+            var iconMetadata = string.Join(" ", new[]
+            {
+               BuildMetadataSegment(item.Tags.Join(", "), TagRightIcon),
+               BuildMetadataSegment(item.AssignedTo, AssigneeIcon),
+               BuildMetadataSegment(commits, GithubIcon)
+            }.Where(x => !string.IsNullOrWhiteSpace(x)));
+
+            var metadata = workItemSegment;
+            if (!string.IsNullOrWhiteSpace(stateSegment))
+               metadata = string.IsNullOrWhiteSpace(metadata) ? stateSegment : $"{metadata} - {stateSegment}";
+
+            if (!string.IsNullOrWhiteSpace(iconMetadata))
+               metadata = string.IsNullOrWhiteSpace(metadata) ? iconMetadata : $"{metadata} {iconMetadata}";
 
             var name = WebUtility.HtmlEncode(item.Name);
 
@@ -88,6 +105,18 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          builder.AppendLine("}");
 
          return builder.ToString();
+      }
+
+      private static string BuildMetadataSegment(string value, string iconGlyph = null)
+      {
+         if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
+         var encodedValue = WebUtility.HtmlEncode(value);
+         if (string.IsNullOrWhiteSpace(iconGlyph))
+            return encodedValue;
+
+         return $"<FONT FACE=\"remixicon\" POINT-SIZE=\"12\">{iconGlyph}</FONT>&nbsp;{encodedValue}";
       }
 
       private static string GetWorkItemTypeClass(WorkItemType type)
