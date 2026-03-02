@@ -9,13 +9,12 @@
    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
    <link href="css/app.css" rel="stylesheet" />
-   <link href="AzureDevOpsWorkItemVisualizer.BlazorWebAssembly.styles.css" rel="stylesheet" />
 </head>
 
 <body class="full-screen">
-   <script src="//d3js.org/d3.v5.min.js"></script>
-   <script src="https://unpkg.com/@hpcc-js/wasm@0.3.15/dist/index.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-graphviz/3.1.0/d3-graphviz.min.js" integrity="sha512-xDh+TOcWBsd00MmoBRuZvRwwiWj1sQonBPxIriVzrP6ea/3dQGSv4AY8h7dJkU1tFeEJrPgsQfvk4iVjFjQVtw==" crossorigin="anonymous"></script>
+   <script src="https://d3js.org/d3.v5.min.js" defer></script>
+   <script src="https://unpkg.com/@hpcc-js/wasm@0.3.15/dist/index.min.js" defer></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-graphviz/3.1.0/d3-graphviz.min.js" integrity="sha512-xDh+TOcWBsd00MmoBRuZvRwwiWj1sQonBPxIriVzrP6ea/3dQGSv4AY8h7dJkU1tFeEJrPgsQfvk4iVjFjQVtw==" crossorigin="anonymous" defer></script>
 
    <div id="app" class="full-screen">
       <div class="app-loading">Loading...</div>
@@ -23,7 +22,7 @@
 
    <div id="version-info">Azure DevOps Work Item Visualizer - v###</div>
 
-   <script src="_framework/blazor.webassembly.js"></script>
+   <script src="_framework/blazor.webassembly.js" autostart="false"></script>
 
    <style>
       .full-screen {
@@ -49,18 +48,29 @@
       }
 
       (function loadThemeFromStorage() {
-         try {
-            const raw = localStorage.getItem("editor");
-            if (!raw) {
-               applyTheme("system");
-               return;
-            }
+          try {
+             const rawTheme = localStorage.getItem("theme");
+             if (rawTheme) {
+                try {
+                   applyTheme(JSON.parse(rawTheme));
+                } catch {
+                   applyTheme(rawTheme);
+                }
 
-            const values = JSON.parse(raw);
-            applyTheme(values?.Theme ?? "system");
-         } catch {
-            applyTheme("system");
-         }
+                return;
+             }
+
+             const rawEditor = localStorage.getItem("editor");
+             if (!rawEditor) {
+                applyTheme("system");
+                return;
+             }
+
+             const values = JSON.parse(rawEditor);
+             applyTheme(values?.Theme ?? "system");
+          } catch {
+             applyTheme("system");
+          }
       })();
 
       function updateGraph(content) {
@@ -102,6 +112,22 @@
             }
          });
       }
+
+      Blazor.start({
+         loadBootResource: function (type, name, defaultUri) {
+            const hostname = window.location.hostname;
+            const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
+            if (!isLocalhost) {
+               return defaultUri;
+            }
+
+            if (type === "dotnetjs") {
+               return defaultUri;
+            }
+
+            return fetch(defaultUri, { cache: "no-store" });
+         }
+      });
    </script>
 </body>
 
