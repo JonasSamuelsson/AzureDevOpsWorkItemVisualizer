@@ -19,7 +19,6 @@
    <div class="theme-shell" role="group" aria-label="Theme">
       <button type="button" class="theme-button theme-trigger" title="@GetThemeTitle()" aria-label="@GetThemeTitle()" aria-haspopup="true" aria-expanded="@_themeMenuOpen" @onclick="ToggleThemeMenu">
          <span class="@GetThemeIconClass()" aria-hidden="true"></span>
-         <span class="oi oi-caret-bottom theme-trigger-caret"></span>
       </button>
       <div class="theme-menu" hidden="@(!_themeMenuOpen)">
          <button type="button" class="@GetThemeButtonClass(ThemeSystem)" title="System theme" aria-label="System theme" @onclick="SetSystemTheme"><span class="oi oi-monitor theme-icon" aria-hidden="true"></span></button>
