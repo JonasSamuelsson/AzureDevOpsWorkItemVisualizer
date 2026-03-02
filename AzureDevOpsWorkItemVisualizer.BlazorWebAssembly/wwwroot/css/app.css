@@ -11,8 +11,8 @@
    --editor-focus-ring: rgba(37, 99, 235, 0.25);
    --editor-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
    --graph-bg: #edf2fa;
-   --graph-link: #64748b;
-   --graph-link-related: #4f46e5;
+   --graph-link: #0b1220;
+   --graph-link-related: #0b1220;
    --graph-label: #334155;
    --graph-node-bug: #cc293d;
    --graph-node-epic: #ff7700;
@@ -35,8 +35,8 @@
    --editor-focus-ring: rgba(147, 197, 253, 0.32);
    --editor-shadow: 0 22px 44px rgba(2, 6, 23, 0.45);
    --graph-bg: #060d1a;
-   --graph-link: #9fb0cc;
-   --graph-link-related: #93c5fd;
+   --graph-link: #e2e8f0;
+   --graph-link-related: #e2e8f0;
    --graph-label: #d1ddf2;
    --graph-node-bug: #cc293d;
    --graph-node-epic: #ff7700;
@@ -60,8 +60,8 @@
       --editor-focus-ring: rgba(147, 197, 253, 0.32);
       --editor-shadow: 0 22px 44px rgba(2, 6, 23, 0.45);
       --graph-bg: #060d1a;
-      --graph-link: #9fb0cc;
-      --graph-link-related: #93c5fd;
+      --graph-link: #e2e8f0;
+      --graph-link-related: #e2e8f0;
       --graph-label: #d1ddf2;
       --graph-node-bug: #cc293d;
       --graph-node-epic: #ff7700;
@@ -202,7 +202,7 @@ html, body {
 }
 
 #graph :is(.wi-link, .edge) text {
-   fill: var(--graph-label) !important;
+   fill: var(--wi-link-color) !important;
 }
 
 #graph :is(.wi-link-related) {
