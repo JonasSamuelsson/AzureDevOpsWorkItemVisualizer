@@ -116,39 +116,39 @@ html, body {
    stroke: transparent !important;
 }
 
-#graph :is(.wi-node, [id^="wi-node-"], .node) {
+#graph :is(.wi-node, .node) {
    --wi-node-accent: var(--editor-border);
    --wi-node-fill: var(--editor-surface);
    --wi-node-stroke: var(--editor-border);
    --wi-node-text: var(--graph-node-on-light);
 }
 
-#graph :is(.wi-node.is-active, [id*="-active-"]) {
+#graph :is(.wi-node.is-active) {
    --wi-node-fill: var(--wi-node-accent);
    --wi-node-stroke: var(--wi-node-accent);
 }
 
-#graph :is(.wi-node.is-finished, [id*="-finished-"]) {
+#graph :is(.wi-node.is-finished) {
    --wi-node-fill: transparent;
    --wi-node-stroke: var(--wi-node-accent);
    --wi-node-text: var(--graph-node-finished-text);
 }
 
-#graph :is(.wi-node.is-highlighted, [id*="-highlighted-"]) :is(path, polygon, ellipse, rect) {
+#graph :is(.wi-node.is-highlighted) :is(path, polygon, ellipse, rect) {
    stroke-width: 2.4px !important;
 }
 
-#graph :is(.wi-node, [id^="wi-node-"], .node) :is(path, polygon, ellipse, rect) {
+#graph :is(.wi-node, .node) :is(path, polygon, ellipse, rect) {
    fill: var(--wi-node-fill) !important;
    stroke: var(--wi-node-stroke) !important;
    transition: fill 0.2s ease, stroke 0.2s ease;
 }
 
-#graph :is(.wi-node, [id^="wi-node-"], .node) text {
+#graph :is(.wi-node, .node) text {
    fill: var(--wi-node-text) !important;
 }
 
-#graph :is(.wi-node, [id^="wi-node-"], .node) text tspan[font-family="remixicon"] {
+#graph :is(.wi-node, .node) text tspan[font-family="remixicon"] {
    fill: var(--graph-label) !important;
    opacity: 0.74;
    alignment-baseline: middle;
@@ -157,23 +157,23 @@ html, body {
    transform-origin: center;
 }
 
-#graph :is(.wi-node-bug, [id^="wi-node-bug-"]) {
+#graph :is(.wi-node-bug) {
    --wi-node-accent: var(--graph-node-bug);
 }
 
-#graph :is(.wi-node-epic, [id^="wi-node-epic-"]) {
+#graph :is(.wi-node-epic) {
    --wi-node-accent: var(--graph-node-epic);
 }
 
-#graph :is(.wi-node-feature, [id^="wi-node-feature-"]) {
+#graph :is(.wi-node-feature) {
    --wi-node-accent: var(--graph-node-feature);
 }
 
-#graph :is(.wi-node-pbi, [id^="wi-node-pbi-"]) {
+#graph :is(.wi-node-pbi) {
    --wi-node-accent: var(--graph-node-pbi);
 }
 
-#graph :is(.wi-node-task, [id^="wi-node-task-"]) {
+#graph :is(.wi-node-task) {
    --wi-node-accent: var(--graph-node-task);
 }
 

@@ -60,7 +60,6 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             }.Where(x => !string.IsNullOrWhiteSpace(x)));
 
             attributes["label"] = $"<<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\"><tr><td>{metadata}</td></tr><tr><td>{name}</td></tr></table>>";
-            attributes["id"] = $"\"wi-node-{nodeTypeClass}-{nodeState}-{nodeHighlight}-{item.Id}\"";
             attributes["class"] = $"\"{nodeClasses}\"";
             attributes["shape"] = "box";
             attributes["style"] = highlight ? "\"bold,filled,rounded\"" : "\"filled,rounded\"";
@@ -73,11 +72,10 @@ namespace AzureDevOpsWorkItemVisualizer.Core
 
          foreach (var link in data.Links.OrderBy(x => x.FromWorkItemId).ThenBy(x => x.ToWorkItemId).ThenBy(x => x.Type))
          {
-            var linkTypeClass = link.Type.ToString().Kebaberize();
             var attributes = new Dictionary<string, string>
             {
                ["label"] = $"\"{link.Type.ToString().Humanize()}\"",
-               ["class"] = $"\"wi-link wi-link-{linkTypeClass}\""
+               ["class"] = $"\"wi-link\""
             };
 
             if (link.Type == LinkType.Related)
