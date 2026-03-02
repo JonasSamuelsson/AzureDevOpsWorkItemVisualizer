@@ -11,8 +11,9 @@ namespace AzureDevOpsWorkItemVisualizer.Core
    public class GraphGenerator
    {
       private const string AssigneeIcon = "&#xF264;";
-      private const string TagRightIcon = "&#xF023;";
+      private const string TagIcon = "&#xF023;";
       private const string GithubIcon = "&#xEDCB;";
+      private const string GraphTextFontFace = "Helvetica Neue";
 
       public string GenerateGraph(WorkItemCollection data, Options options)
       {
@@ -21,29 +22,30 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          builder.AppendLine("digraph {");
 
          builder.AppendLine($"  rankdir = {options.RankDir};");
+         builder.AppendLine($"  node [fontname=\"{GraphTextFontFace}\"];");
+         builder.AppendLine($"  edge [fontname=\"{GraphTextFontFace}\"];");
 
          foreach (var item in data.WorkItems.OrderBy(x => x.Id))
          {
             var attributes = new Dictionary<string, string>();
 
             var commits = item.Commits == 0 ? "" : item.Commits == 1 ? $"{item.Commits} commit" : $"{item.Commits} commits";
-            var workItemSegment = BuildMetadataSegment($"{item.Type} {item.Id}");
-            var stateSegment = BuildMetadataSegment(item.State);
-            var iconMetadata = string.Join(" ", new[]
+            var workItemAndState = $"{item.Type} {item.Id}";
+            if (!string.IsNullOrWhiteSpace(item.State))
+               workItemAndState = $"{workItemAndState} - {item.State}";
+
+            var iconMetadata = string.Concat(new[]
             {
-               BuildMetadataSegment(item.Tags.Join(", "), TagRightIcon),
-               BuildMetadataSegment(item.AssignedTo, AssigneeIcon),
-               BuildMetadataSegment(commits, GithubIcon)
-            }.Where(x => !string.IsNullOrWhiteSpace(x)));
+               BuildIconMetadataSegment(item.Tags.Join(", "), TagIcon),
+               BuildIconMetadataSegment(item.AssignedTo, AssigneeIcon),
+               BuildIconMetadataSegment(commits, GithubIcon)
+            });
 
-            var metadata = workItemSegment;
-            if (!string.IsNullOrWhiteSpace(stateSegment))
-               metadata = string.IsNullOrWhiteSpace(metadata) ? stateSegment : $"{metadata} - {stateSegment}";
-
+            var metadata = BuildTextSegment(workItemAndState);
             if (!string.IsNullOrWhiteSpace(iconMetadata))
-               metadata = string.IsNullOrWhiteSpace(metadata) ? iconMetadata : $"{metadata} {iconMetadata}";
+               metadata = string.IsNullOrWhiteSpace(metadata) ? iconMetadata : $"{metadata}{iconMetadata}";
 
-            var name = WebUtility.HtmlEncode(item.Name);
+            var name = BuildTextSegment(item.Name);
 
             var highlight = options.HighlightedWorkItemIds.Contains(item.Id);
             var nodeTypeClass = GetWorkItemTypeClass(item.Type);
@@ -107,16 +109,21 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          return builder.ToString();
       }
 
-      private static string BuildMetadataSegment(string value, string iconGlyph = null)
+      private static string BuildIconMetadataSegment(string value, string iconGlyph)
+      {
+         if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(iconGlyph))
+            return string.Empty;
+
+         return $"<FONT FACE=\"remixicon\" POINT-SIZE=\"12\">{iconGlyph}</FONT>&nbsp;{BuildTextSegment($"{value}")}";
+      }
+
+      private static string BuildTextSegment(string value)
       {
          if (string.IsNullOrWhiteSpace(value))
             return string.Empty;
 
          var encodedValue = WebUtility.HtmlEncode(value);
-         if (string.IsNullOrWhiteSpace(iconGlyph))
-            return encodedValue;
-
-         return $"<FONT FACE=\"remixicon\" POINT-SIZE=\"12\">{iconGlyph}</FONT>&nbsp;{encodedValue}";
+         return $"<FONT FACE=\"{GraphTextFontFace}\">{encodedValue}</FONT>";
       }
 
       private static string GetWorkItemTypeClass(WorkItemType type)
