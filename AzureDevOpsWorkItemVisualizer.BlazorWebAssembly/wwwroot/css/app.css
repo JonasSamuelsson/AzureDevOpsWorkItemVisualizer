@@ -72,7 +72,7 @@
 }
 
 html, body {
-   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+   font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
    background: var(--editor-bg);
    color: var(--editor-text);
 }

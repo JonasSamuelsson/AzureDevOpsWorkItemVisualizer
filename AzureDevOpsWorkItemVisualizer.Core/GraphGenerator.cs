@@ -13,7 +13,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
       private const string AssigneeIcon = "&#xF264;";
       private const string TagIcon = "&#xF023;";
       private const string GithubIcon = "&#xEDCB;";
-      private const string GraphTextFontFace = "Helvetica Neue";
+      private const string GraphTextFontFace = "Arial";
 
       public string GenerateGraph(WorkItemCollection data, Options options)
       {
@@ -59,7 +59,7 @@ namespace AzureDevOpsWorkItemVisualizer.Core
                highlight ? "is-highlighted" : null
             }.Where(x => !string.IsNullOrWhiteSpace(x)));
 
-            attributes["label"] = $"<<table border=\"0\"><tr><td>{metadata}</td></tr><tr><td>{name}</td></tr></table>>";
+            attributes["label"] = $"<<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\"><tr><td>{metadata}</td></tr><tr><td>{name}</td></tr></table>>";
             attributes["id"] = $"\"wi-node-{nodeTypeClass}-{nodeState}-{nodeHighlight}-{item.Id}\"";
             attributes["class"] = $"\"{nodeClasses}\"";
             attributes["shape"] = "box";
@@ -113,7 +113,8 @@ namespace AzureDevOpsWorkItemVisualizer.Core
          if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(iconGlyph))
             return string.Empty;
 
-         return $"<FONT FACE=\"remixicon\" POINT-SIZE=\"12\">{iconGlyph}</FONT>&nbsp;{BuildTextSegment($"{value}")}";
+         var encodedValue = WebUtility.HtmlEncode(value);
+         return $"&nbsp;<FONT FACE=\"remixicon\" POINT-SIZE=\"12\">{iconGlyph}</FONT>&nbsp;<FONT FACE=\"{GraphTextFontFace}\">{encodedValue}</FONT>";
       }
 
       private static string BuildTextSegment(string value)
