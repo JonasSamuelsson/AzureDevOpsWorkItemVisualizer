@@ -12,14 +12,12 @@
    --editor-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
    --graph-bg: #edf2fa;
    --graph-link: #0b1220;
-   --graph-link-related: #0b1220;
    --graph-label: #334155;
    --graph-node-bug: #cc293d;
    --graph-node-epic: #ff7700;
    --graph-node-feature: #954ab9;
    --graph-node-pbi: #009ccc;
    --graph-node-task: #f2cb1d;
-   --graph-node-on-dark: #0b1220;
    --graph-node-on-light: #0b1220;
    --graph-node-finished-text: #0b1220;
 }
@@ -36,14 +34,12 @@
    --editor-shadow: 0 22px 44px rgba(2, 6, 23, 0.45);
    --graph-bg: #060d1a;
    --graph-link: #e2e8f0;
-   --graph-link-related: #e2e8f0;
    --graph-label: #d1ddf2;
    --graph-node-bug: #cc293d;
    --graph-node-epic: #ff7700;
    --graph-node-feature: #954ab9;
    --graph-node-pbi: #009ccc;
    --graph-node-task: #f2cb1d;
-   --graph-node-on-dark: #0b1220;
    --graph-node-on-light: #0b1220;
    --graph-node-finished-text: #e2e8f0;
 }
@@ -61,14 +57,12 @@
       --editor-shadow: 0 22px 44px rgba(2, 6, 23, 0.45);
       --graph-bg: #060d1a;
       --graph-link: #e2e8f0;
-      --graph-link-related: #e2e8f0;
       --graph-label: #d1ddf2;
       --graph-node-bug: #cc293d;
       --graph-node-epic: #ff7700;
       --graph-node-feature: #954ab9;
       --graph-node-pbi: #009ccc;
       --graph-node-task: #f2cb1d;
-      --graph-node-on-dark: #0b1220;
       --graph-node-on-light: #0b1220;
       --graph-node-finished-text: #e2e8f0;
    }
@@ -165,27 +159,22 @@ html, body {
 
 #graph :is(.wi-node-bug, [id^="wi-node-bug-"]) {
    --wi-node-accent: var(--graph-node-bug);
-   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node-epic, [id^="wi-node-epic-"]) {
    --wi-node-accent: var(--graph-node-epic);
-   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node-feature, [id^="wi-node-feature-"]) {
    --wi-node-accent: var(--graph-node-feature);
-   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node-pbi, [id^="wi-node-pbi-"]) {
    --wi-node-accent: var(--graph-node-pbi);
-   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node-task, [id^="wi-node-task-"]) {
    --wi-node-accent: var(--graph-node-task);
-   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-link, .edge) {
@@ -203,10 +192,6 @@ html, body {
 
 #graph :is(.wi-link, .edge) text {
    fill: var(--wi-link-color) !important;
-}
-
-#graph :is(.wi-link-related) {
-   --wi-link-color: var(--graph-link-related);
 }
 
 .theme-backdrop {
@@ -267,11 +252,6 @@ html, body {
    display: inline-block;
    font-size: 0.95rem;
    line-height: 1;
-}
-
-.icon-mirror-x {
-   display: inline-block;
-   transform: scaleX(-1);
 }
 
 .theme-button:hover {
