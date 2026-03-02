@@ -19,11 +19,11 @@ namespace AzureDevOpsWorkItemVisualizer.Core
       {
          var builder = new StringBuilder();
 
-         builder.AppendLine("digraph {");
+         builder.AppendLine("digraph \"\" {");
 
          builder.AppendLine($"  rankdir = {options.RankDir};");
-         builder.AppendLine($"  node [fontname=\"{GraphTextFontFace}\"];");
-         builder.AppendLine($"  edge [fontname=\"{GraphTextFontFace}\"];");
+         builder.AppendLine($"  node [fontname=\"{GraphTextFontFace}\", tooltip=\" \"];");
+         builder.AppendLine($"  edge [fontname=\"{GraphTextFontFace}\", tooltip=\" \", labeltooltip=\" \"];");
 
          foreach (var item in data.WorkItems.OrderBy(x => x.Id))
          {
