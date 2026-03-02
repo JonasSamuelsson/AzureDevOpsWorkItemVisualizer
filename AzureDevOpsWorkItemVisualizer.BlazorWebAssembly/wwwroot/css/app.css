@@ -185,24 +185,24 @@ html, body {
    --wi-node-text: var(--graph-node-on-light);
 }
 
-#graph :is(.wi-link, [id^="wi-link-"], .edge) {
+#graph :is(.wi-link, .edge) {
    --wi-link-color: var(--graph-link);
 }
 
-#graph :is(.wi-link, [id^="wi-link-"], .edge) path {
+#graph :is(.wi-link, .edge) path {
    stroke: var(--wi-link-color) !important;
 }
 
-#graph :is(.wi-link, [id^="wi-link-"], .edge) polygon {
+#graph :is(.wi-link, .edge) polygon {
    stroke: var(--wi-link-color) !important;
    fill: var(--wi-link-color) !important;
 }
 
-#graph :is(.wi-link, [id^="wi-link-"], .edge) text {
+#graph :is(.wi-link, .edge) text {
    fill: var(--graph-label) !important;
 }
 
-#graph :is(.wi-link-related, [id^="wi-link-related-"]) {
+#graph :is(.wi-link-related) {
    --wi-link-color: var(--graph-link-related);
 }
 

@@ -77,7 +77,6 @@ namespace AzureDevOpsWorkItemVisualizer.Core
             var attributes = new Dictionary<string, string>
             {
                ["label"] = $"\"{link.Type.ToString().Humanize()}\"",
-               ["id"] = $"\"wi-link-{linkTypeClass}-{link.FromWorkItemId}-{link.ToWorkItemId}\"",
                ["class"] = $"\"wi-link wi-link-{linkTypeClass}\""
             };
 
