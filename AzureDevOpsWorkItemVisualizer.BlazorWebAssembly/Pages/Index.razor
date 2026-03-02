@@ -21,9 +21,9 @@
          <span class="@GetThemeIconClass()" aria-hidden="true"></span>
       </button>
       <div class="theme-menu" hidden="@(!_themeMenuOpen)">
-         <button type="button" class="@GetThemeButtonClass(ThemeSystem)" title="System theme" aria-label="System theme" @onclick="SetSystemTheme"><span class="oi oi-monitor theme-icon" aria-hidden="true"></span></button>
-         <button type="button" class="@GetThemeButtonClass(ThemeLight)" title="Light theme" aria-label="Light theme" @onclick="SetLightTheme"><span class="oi oi-sun theme-icon" aria-hidden="true"></span></button>
-         <button type="button" class="@GetThemeButtonClass(ThemeDark)" title="Dark theme" aria-label="Dark theme" @onclick="SetDarkTheme"><span class="oi oi-moon theme-icon" aria-hidden="true"></span></button>
+         <button type="button" class="@GetThemeButtonClass(ThemeSystem)" title="System theme" aria-label="System theme" @onclick="SetSystemTheme"><span class="ri-computer-line theme-icon" aria-hidden="true"></span></button>
+         <button type="button" class="@GetThemeButtonClass(ThemeLight)" title="Light theme" aria-label="Light theme" @onclick="SetLightTheme"><span class="ri-sun-line theme-icon" aria-hidden="true"></span></button>
+         <button type="button" class="@GetThemeButtonClass(ThemeDark)" title="Dark theme" aria-label="Dark theme" @onclick="SetDarkTheme"><span class="ri-moon-line theme-icon" aria-hidden="true"></span></button>
       </div>
    </div>
    <div class="editor-shell">
@@ -105,8 +105,8 @@
             </button>
             <div class="editor-link-actions">
                <a href="#" class="editor-link" @onclick="CopyUriToClipboard">Copy url</a>
-               <span class="oi oi-caret-top editor-toggle" hidden="@(!_editorVisible)" @onclick="ToggleEditorVisibility"></span>
-               <span class="oi oi-caret-bottom editor-toggle" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+               <span class="ri-arrow-up-s-line editor-toggle" hidden="@(!_editorVisible)" @onclick="ToggleEditorVisibility"></span>
+               <span class="ri-arrow-down-s-line editor-toggle" hidden="@(_editorVisible)" @onclick="ToggleEditorVisibility"></span>
             </div>
          </div>
       </div>
@@ -356,9 +356,9 @@
    {
       return NormalizeTheme(_editorValues.Theme) switch
       {
-         ThemeLight => "oi oi-sun theme-icon",
-         ThemeDark => "oi oi-moon theme-icon",
-         _ => "oi oi-monitor theme-icon"
+         ThemeLight => "ri-sun-line theme-icon",
+         ThemeDark => "ri-moon-line theme-icon",
+         _ => "ri-computer-line theme-icon"
       };
    }
 
