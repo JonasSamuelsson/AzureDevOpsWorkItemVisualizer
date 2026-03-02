@@ -14,13 +14,14 @@
    --graph-link: #64748b;
    --graph-link-related: #4f46e5;
    --graph-label: #334155;
-   --graph-node-bug: #dc2626;
-   --graph-node-epic: #ea580c;
-   --graph-node-feature: #4f46e5;
-   --graph-node-pbi: #0ea5e9;
-   --graph-node-task: #eab308;
-   --graph-node-on-dark: #f8fafc;
-   --graph-node-on-light: #1e293b;
+   --graph-node-bug: #cc293d;
+   --graph-node-epic: #ff7700;
+   --graph-node-feature: #954ab9;
+   --graph-node-pbi: #009ccc;
+   --graph-node-task: #f2cb1d;
+   --graph-node-on-dark: #0b1220;
+   --graph-node-on-light: #0b1220;
+   --graph-node-finished-text: #0b1220;
 }
 
 [data-theme="dark"] {
@@ -37,13 +38,14 @@
    --graph-link: #9fb0cc;
    --graph-link-related: #93c5fd;
    --graph-label: #d1ddf2;
-   --graph-node-bug: #dc2626;
-   --graph-node-epic: #c2410c;
-   --graph-node-feature: #4338ca;
-   --graph-node-pbi: #0ea5e9;
-   --graph-node-task: #f59e0b;
-   --graph-node-on-dark: #f8fafc;
+   --graph-node-bug: #cc293d;
+   --graph-node-epic: #ff7700;
+   --graph-node-feature: #954ab9;
+   --graph-node-pbi: #009ccc;
+   --graph-node-task: #f2cb1d;
+   --graph-node-on-dark: #0b1220;
    --graph-node-on-light: #0b1220;
+   --graph-node-finished-text: #e2e8f0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -61,13 +63,14 @@
       --graph-link: #9fb0cc;
       --graph-link-related: #93c5fd;
       --graph-label: #d1ddf2;
-      --graph-node-bug: #dc2626;
-      --graph-node-epic: #c2410c;
-      --graph-node-feature: #4338ca;
-      --graph-node-pbi: #0ea5e9;
-      --graph-node-task: #f59e0b;
-      --graph-node-on-dark: #f8fafc;
+      --graph-node-bug: #cc293d;
+      --graph-node-epic: #ff7700;
+      --graph-node-feature: #954ab9;
+      --graph-node-pbi: #009ccc;
+      --graph-node-task: #f2cb1d;
+      --graph-node-on-dark: #0b1220;
       --graph-node-on-light: #0b1220;
+      --graph-node-finished-text: #e2e8f0;
    }
 }
 
@@ -123,7 +126,7 @@ html, body {
    --wi-node-accent: var(--editor-border);
    --wi-node-fill: var(--editor-surface);
    --wi-node-stroke: var(--editor-border);
-   --wi-node-text: var(--editor-text);
+   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node.is-active, [id*="-active-"]) {
@@ -134,7 +137,7 @@ html, body {
 #graph :is(.wi-node.is-finished, [id*="-finished-"]) {
    --wi-node-fill: transparent;
    --wi-node-stroke: var(--wi-node-accent);
-   --wi-node-text: var(--editor-text);
+   --wi-node-text: var(--graph-node-finished-text);
 }
 
 #graph :is(.wi-node.is-highlighted, [id*="-highlighted-"]) :is(path, polygon, ellipse, rect) {
@@ -162,17 +165,17 @@ html, body {
 
 #graph :is(.wi-node-bug, [id^="wi-node-bug-"]) {
    --wi-node-accent: var(--graph-node-bug);
-   --wi-node-text: var(--graph-node-on-dark);
+   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node-epic, [id^="wi-node-epic-"]) {
    --wi-node-accent: var(--graph-node-epic);
-   --wi-node-text: var(--graph-node-on-dark);
+   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node-feature, [id^="wi-node-feature-"]) {
    --wi-node-accent: var(--graph-node-feature);
-   --wi-node-text: var(--graph-node-on-dark);
+   --wi-node-text: var(--graph-node-on-light);
 }
 
 #graph :is(.wi-node-pbi, [id^="wi-node-pbi-"]) {
